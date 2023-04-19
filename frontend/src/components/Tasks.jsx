@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { getAllTasks } from "../functions/fetch";
 import Task from "./Task";
 
-export default function Content() {
+export default function Tasks() {
   const [tasks, setTasks] = useState([]);
 
   useEffect(() => {
@@ -15,6 +15,7 @@ export default function Content() {
 
   return (
     <div className="content">
+      <h2><center>Saved Tasks:</center></h2>
       {
         tasks.map(task => (
           <Task key={ task.id } task={ task } />
