@@ -1,6 +1,7 @@
 package com.codecool.tasktracker.repositories;
 
 import com.codecool.tasktracker.model.Task;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -20,6 +21,11 @@ public class TaskRepositoryTest {
 
     @Autowired
     private TaskRepository taskRepository;
+
+    @BeforeEach
+    public void deleteDatabaseEntries() {
+        taskRepository.deleteAll();
+    }
 
     @Test
     public void checkForEmptyDatabase() {
