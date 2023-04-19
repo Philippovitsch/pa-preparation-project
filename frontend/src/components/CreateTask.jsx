@@ -1,27 +1,8 @@
-import { useState } from "react";
-import { saveNewTask } from "../functions/fetch";
+import createTaskLogic from "../logic/CreateTaskLogic";
 
 export default function CreateTask() {
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
-
-  const saveTask = async () => {
-    const newTask = {
-      name: name,
-      description: description,
-      timestamp: new Date().toISOString()
-    };
-
-    const response = await saveNewTask(newTask);
-    
-    if (response.status == 200) {
-      setSuccessMessage("Successfully saved card!");
-    } else {
-      setSuccessMessage("Error while saving card");
-    }
-  };
-
+  const [{setName, setDescription, saveTask, successMessage}] = createTaskLogic();
+  
   return (
     <div className="content">
       <center>
