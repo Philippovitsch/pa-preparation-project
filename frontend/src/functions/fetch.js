@@ -20,7 +20,18 @@ export function saveNewTask(task) {
       return response;
     })
     .catch(error => {
-      console.log(error);
-      return error;
+      console.log("Error: " + error);
+      return error.response;
+    });
+}
+
+export function deleteTaskByName(name) {
+  return axiosInstance.delete(url + `/tasks/${name}`)
+    .then(response => {
+      return response;
+    })
+    .catch(error => {
+      console.log("Error: " + error);
+      return error.response;
     });
 }

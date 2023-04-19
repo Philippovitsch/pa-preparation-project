@@ -47,6 +47,11 @@ a {
   margin: 12px;
 }
 
+.delete-icon {
+  float: right;
+  cursor: pointer;
+}
+
 .footer {
   background-color: lightblue;
   position: absolute;
