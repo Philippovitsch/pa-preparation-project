@@ -16,7 +16,6 @@ import java.util.List;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.startsWith;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -97,10 +96,14 @@ public class TaskEndpointTest {
 
     @Test
     public void deleteTaskByNameTest() throws Exception {
-        doNothing().when(taskEndpointService).deleteTaskByName(any());
+        Task task = new Task("Emad's Task", "Test description", Timestamp.valueOf("2023-04-22 02:00:00.0"));
+        when(taskEndpointService.deleteTaskByName(any())).thenReturn(task);
         mockMvc.perform(delete("/api/tasks/Emad"))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name", is(task.getName())))
+                .andExpect(jsonPath("$.description", is(task.getDescription())))
+                .andExpect(jsonPath("$.timestamp", startsWith(task.getTimestamp().toString().substring(0, 10))));
     }
 
 }

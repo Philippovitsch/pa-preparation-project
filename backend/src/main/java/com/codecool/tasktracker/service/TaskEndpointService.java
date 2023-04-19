@@ -23,21 +23,26 @@ public class TaskEndpointService {
         return taskRepository.getTaskByName(name);
     }
 
-    public Task saveTask(Task task) {
-        return taskRepository.save(task);
+    public Task saveTask(Task newTask) {
+        Task task = taskRepository.getTaskByName(newTask.getName());
+        return (task == null) ? taskRepository.save(newTask) : null;
     }
 
     public Task updateTaskByName(String name, Task updatedTask) {
         Task task = taskRepository.getTaskByName(name);
-        task.setName(updatedTask.getName());
-        task.setDescription(updatedTask.getDescription());
-        task.setTimestamp(updatedTask.getTimestamp());
-        return taskRepository.save(task);
+        if (task != null) {
+            task.setName(updatedTask.getName());
+            task.setDescription(updatedTask.getDescription());
+            task.setTimestamp(updatedTask.getTimestamp());
+            taskRepository.save(task);
+        }
+        return task;
     }
 
-    public void deleteTaskByName(String name) {
-        Task task = getTaskByName(name);
-        taskRepository.delete(task);
+    public Task deleteTaskByName(String name) {
+        Task task = taskRepository.getTaskByName(name);
+        if (task != null) taskRepository.delete(task);
+        return task;
     }
 
 }
