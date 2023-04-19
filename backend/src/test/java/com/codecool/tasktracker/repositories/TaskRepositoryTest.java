@@ -41,7 +41,7 @@ public class TaskRepositoryTest {
         entityManager.persist(task1);
         entityManager.persist(task2);
         entityManager.persist(task3);
-        Task returnedTask = taskRepository.getTaskByName("Task 1");
+        Task returnedTask = taskRepository.getTaskByName(task1.getName());
         assertEquals(task1, returnedTask);
     }
 

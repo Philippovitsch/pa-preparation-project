@@ -1,7 +1,5 @@
 package com.codecool.tasktracker.endpoints;
 
-import com.codecool.tasktracker.exceptions.TaskAlreadyExistsException;
-import com.codecool.tasktracker.exceptions.TaskNotFoundException;
 import com.codecool.tasktracker.model.Task;
 import com.codecool.tasktracker.service.TaskEndpointService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -66,7 +64,7 @@ public class TaskEndpointTest {
 
     @Test
     public void getTaskByNameThrowsError() throws Exception {
-        when(taskEndpointService.getTaskByName(any())).thenThrow(new TaskNotFoundException("Task not found!"));
+        when(taskEndpointService.getTaskByName(any())).thenReturn(null);
         mockMvc.perform(get("/api/tasks/John"))
                 .andDo(print())
                 .andExpect(status().is4xxClientError());
@@ -91,7 +89,7 @@ public class TaskEndpointTest {
     @Test
     public void saveTaskThrowsError() throws Exception {
         Task task = new Task("Phil's Task", "Test description", Timestamp.valueOf("2023-04-20 02:00:00.0"));
-        when(taskEndpointService.saveTask(any())).thenThrow(new TaskAlreadyExistsException("Task already exists!"));
+        when(taskEndpointService.saveTask(any())).thenReturn(null);
         mockMvc.perform(post("/api/tasks")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(task))
@@ -120,7 +118,7 @@ public class TaskEndpointTest {
     @Test
     public void updateTaskByNameThrowsError() throws Exception {
         Task task = new Task("El's Task", "Test description", Timestamp.valueOf("2023-04-21 02:00:00.0"));
-        when(taskEndpointService.updateTaskByName(any(), any())).thenThrow(new TaskNotFoundException("Task not found!"));
+        when(taskEndpointService.updateTaskByName(any(), any())).thenReturn(null);
         mockMvc.perform(put("/api/tasks/El")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(task))
@@ -144,7 +142,7 @@ public class TaskEndpointTest {
 
     @Test
     public void deleteTaskByNameThrowsError() throws Exception {
-        when(taskEndpointService.deleteTaskByName(any())).thenThrow(new TaskNotFoundException("Task not found!"));
+        when(taskEndpointService.deleteTaskByName(any())).thenReturn(null);
         mockMvc.perform(delete("/api/tasks/Emad"))
                 .andDo(print())
                 .andExpect(status().is4xxClientError());
