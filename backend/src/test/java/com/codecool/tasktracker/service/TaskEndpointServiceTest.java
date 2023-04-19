@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import java.sql.Timestamp;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -32,6 +32,7 @@ public class TaskEndpointServiceTest {
         );
         when(taskRepository.findAll()).thenReturn(tasks);
         assertEquals(tasks, taskEndpointService.getAllTasks());
+        verify(taskRepository, times(1)).findAll();
     }
 
     @Test
@@ -39,13 +40,34 @@ public class TaskEndpointServiceTest {
         Task task = new Task("John's Task", "Test description", Timestamp.valueOf("2023-04-19 02:00:00.0"));
         when(taskRepository.getTaskByName(any())).thenReturn(task);
         assertEquals(task, taskEndpointService.getTaskByName(task.getName()));
+        verify(taskRepository, times(1)).getTaskByName(any());
+    }
+
+    @Test
+    public void getTaskByNameReturnsNull() {
+        Task task = new Task("John's Task", "Test description", Timestamp.valueOf("2023-04-19 02:00:00.0"));
+        when(taskRepository.getTaskByName(any())).thenReturn(null);
+        assertNull(taskEndpointService.getTaskByName(task.getName()));
+        verify(taskRepository, times(1)).getTaskByName(any());
     }
 
     @Test
     public void saveTaskTest() {
         Task task = new Task("Phil's Task", "Test description", Timestamp.valueOf("2023-04-20 02:00:00.0"));
+        when(taskRepository.getTaskByName(any())).thenReturn(null);
         when(taskRepository.save(any())).thenReturn(task);
         assertEquals(task, taskEndpointService.saveTask(task));
+        verify(taskRepository, times(1)).getTaskByName(any());
+        verify(taskRepository, times(1)).save(any());
+    }
+
+    @Test
+    public void saveTaskReturnsNull() {
+        Task task = new Task("Phil's Task", "Test description", Timestamp.valueOf("2023-04-20 02:00:00.0"));
+        when(taskRepository.getTaskByName(any())).thenReturn(task);
+        assertNull(taskEndpointService.saveTask(task));
+        verify(taskRepository, times(1)).getTaskByName(any());
+        verify(taskRepository, times(0)).save(any());
     }
 
     @Test
@@ -57,6 +79,17 @@ public class TaskEndpointServiceTest {
         assertEquals(updatedTask.getName(), taskEndpointService.updateTaskByName("Phil's Task", updatedTask).getName());
         assertEquals(updatedTask.getDescription(), taskEndpointService.updateTaskByName("Phil's Task", updatedTask).getDescription());
         assertEquals(updatedTask.getTimestamp(), taskEndpointService.updateTaskByName("Phil's Task", updatedTask).getTimestamp());
+        verify(taskRepository, times(3)).getTaskByName(any());
+        verify(taskRepository, times(3)).save(any());
+    }
+
+    @Test
+    public void updateTaskByNameReturnsNull() {
+        Task updatedTask = new Task("El's New Task", "New test description", Timestamp.valueOf("2023-04-20 02:00:00.0"));
+        when(taskRepository.getTaskByName(any())).thenReturn(null);
+        assertNull(taskEndpointService.updateTaskByName("Phil's Task", updatedTask));
+        verify(taskRepository, times(1)).getTaskByName(any());
+        verify(taskRepository, times(0)).save(any());
     }
 
     @Test
@@ -64,9 +97,18 @@ public class TaskEndpointServiceTest {
         Task task = new Task("Emad's Task", "Test description", Timestamp.valueOf("2023-04-20 02:00:00.0"));
         when(taskRepository.getTaskByName(any())).thenReturn(task);
         doNothing().when(taskRepository).delete(any());
-        taskEndpointService.deleteTaskByName(task.getName());
+        assertEquals(task, taskEndpointService.deleteTaskByName(task.getName()));
         verify(taskRepository, times(1)).getTaskByName(any());
         verify(taskRepository, times(1)).delete(any());
+    }
+
+    @Test
+    public void deleteTaskByNameReturnsNull() {
+        Task task = new Task("Emad's Task", "Test description", Timestamp.valueOf("2023-04-20 02:00:00.0"));
+        when(taskRepository.getTaskByName(any())).thenReturn(null);
+        assertNull(taskEndpointService.deleteTaskByName(task.getName()));
+        verify(taskRepository, times(1)).getTaskByName(any());
+        verify(taskRepository, times(0)).delete(any());
     }
 
 }

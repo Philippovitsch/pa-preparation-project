@@ -1,5 +1,7 @@
 package com.codecool.tasktracker.endpoints;
 
+import com.codecool.tasktracker.exceptions.TaskAlreadyExistsException;
+import com.codecool.tasktracker.exceptions.TaskNotFoundException;
 import com.codecool.tasktracker.model.Task;
 import com.codecool.tasktracker.service.TaskEndpointService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -63,6 +65,14 @@ public class TaskEndpointTest {
     }
 
     @Test
+    public void getTaskByNameThrowsError() throws Exception {
+        when(taskEndpointService.getTaskByName(any())).thenThrow(new TaskNotFoundException("Task not found!"));
+        mockMvc.perform(get("/api/tasks/John"))
+                .andDo(print())
+                .andExpect(status().is4xxClientError());
+    }
+
+    @Test
     public void saveTaskTest() throws Exception {
         Task task = new Task("Phil's Task", "Test description", Timestamp.valueOf("2023-04-20 02:00:00.0"));
         when(taskEndpointService.saveTask(any())).thenReturn(task);
@@ -76,6 +86,19 @@ public class TaskEndpointTest {
                 .andExpect(jsonPath("$.name", is(task.getName())))
                 .andExpect(jsonPath("$.description", is(task.getDescription())))
                 .andExpect(jsonPath("$.timestamp", startsWith(task.getTimestamp().toString().substring(0, 10))));
+    }
+
+    @Test
+    public void saveTaskThrowsError() throws Exception {
+        Task task = new Task("Phil's Task", "Test description", Timestamp.valueOf("2023-04-20 02:00:00.0"));
+        when(taskEndpointService.saveTask(any())).thenThrow(new TaskAlreadyExistsException("Task already exists!"));
+        mockMvc.perform(post("/api/tasks")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(task))
+                        .accept(MediaType.APPLICATION_JSON)
+                )
+                .andDo(print())
+                .andExpect(status().is4xxClientError());
     }
 
     @Test
@@ -95,6 +118,19 @@ public class TaskEndpointTest {
     }
 
     @Test
+    public void updateTaskByNameThrowsError() throws Exception {
+        Task task = new Task("El's Task", "Test description", Timestamp.valueOf("2023-04-21 02:00:00.0"));
+        when(taskEndpointService.updateTaskByName(any(), any())).thenThrow(new TaskNotFoundException("Task not found!"));
+        mockMvc.perform(put("/api/tasks/El")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(task))
+                        .accept(MediaType.APPLICATION_JSON)
+                )
+                .andDo(print())
+                .andExpect(status().is4xxClientError());
+    }
+
+    @Test
     public void deleteTaskByNameTest() throws Exception {
         Task task = new Task("Emad's Task", "Test description", Timestamp.valueOf("2023-04-22 02:00:00.0"));
         when(taskEndpointService.deleteTaskByName(any())).thenReturn(task);
@@ -104,6 +140,14 @@ public class TaskEndpointTest {
                 .andExpect(jsonPath("$.name", is(task.getName())))
                 .andExpect(jsonPath("$.description", is(task.getDescription())))
                 .andExpect(jsonPath("$.timestamp", startsWith(task.getTimestamp().toString().substring(0, 10))));
+    }
+
+    @Test
+    public void deleteTaskByNameThrowsError() throws Exception {
+        when(taskEndpointService.deleteTaskByName(any())).thenThrow(new TaskNotFoundException("Task not found!"));
+        mockMvc.perform(delete("/api/tasks/Emad"))
+                .andDo(print())
+                .andExpect(status().is4xxClientError());
     }
 
 }
