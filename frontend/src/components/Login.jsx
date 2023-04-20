@@ -1,18 +1,8 @@
-import { useState } from "react"
-import { useNavigate } from "react-router-dom";
+import loginLogic from "../logic/LoginLogic";
 
 export default function Login() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-
-  const navigate = useNavigate();
-
-  const performLogin = () => {
-    localStorage.setItem("username", username);
-    localStorage.setItem("password", password);
-    navigate("/");
-  };
-
+  const [{setUsername, setPassword, performLogin}] = loginLogic();
+  
   return (
     <div className="content">
       <center>

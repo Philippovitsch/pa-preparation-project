@@ -1,18 +1,8 @@
-import { useEffect } from "react"
-import { useNavigate } from "react-router-dom";
+import logoutLogic from "../logic/LogoutLogic";
 
 export default function Logout() {
-  const navigate = useNavigate();
-  const performLogout = () => {
-    localStorage.removeItem("username");
-    localStorage.removeItem("password");
-    setTimeout(() => navigate("/"), 1500);
-  };
+  const [] = logoutLogic();
 
-  useEffect(() => {
-    performLogout();
-  }, []);
-  
   return (
     <div className="content">
       <center>
