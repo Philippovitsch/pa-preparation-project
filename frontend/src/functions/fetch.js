@@ -1,10 +1,27 @@
 import axios from "axios";
+import { Buffer } from 'buffer';
 
-const url = "http://localhost:8080/api"
 const axiosInstance = axios.create();
 
+function getAxiosConfig(subDomain, requestMethod, requestBody) {
+  const username = localStorage.getItem("username");
+  const password = localStorage.getItem("password");
+  const token = `${username}:${password}`;
+  const encodedToken = Buffer.from(token).toString('base64');
+  const config = {
+    method: requestMethod,
+    url: "http://localhost:8080" + subDomain,
+    headers: {
+      "Authorization": "Basic " + encodedToken
+    },
+    data: requestBody
+  };
+  return config;
+}
+
 export function getAllTasks() {
-  return axiosInstance.get(url + "/tasks/all")
+  const axiosConfig = getAxiosConfig("/api/tasks/all", "GET", {});
+  return axiosInstance(axiosConfig)
     .then(response => {
       return response.data;
     })
@@ -15,7 +32,8 @@ export function getAllTasks() {
 }
 
 export function saveNewTask(task) {
-  return axiosInstance.post(url + "/tasks", task)
+  const axiosConfig = getAxiosConfig("/api/tasks", "POST", task);
+  return axiosInstance(axiosConfig)
     .then(response => {
       return response;
     })
@@ -26,7 +44,8 @@ export function saveNewTask(task) {
 }
 
 export function deleteTaskByName(name) {
-  return axiosInstance.delete(url + `/tasks/${name}`)
+  const axiosConfig = getAxiosConfig(`/api/tasks/${name}`, "DELETE", {});
+  return axiosInstance(axiosConfig)
     .then(response => {
       return response;
     })
