@@ -1,7 +1,7 @@
-import loginLogic from "../logic/LoginLogic";
+import useLogin from "../logic/LoginLogic";
 
 export default function Login() {
-  const [{setUsername, setPassword, performLogin}] = loginLogic();
+  const [{setUsername, setPassword, performLogin}] = useLogin();
   
   return (
     <div className="content">

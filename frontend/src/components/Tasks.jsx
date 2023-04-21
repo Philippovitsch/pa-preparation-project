@@ -1,8 +1,8 @@
 import Task from "./Task";
-import taskLogic from "../logic/TaskLogic";
+import useTasks from "../logic/TaskLogic";
 
 export default function Tasks() {
-  const [{ tasks, deleteTask }] = taskLogic();
+  const [{ tasks, deleteTask }] = useTasks();
 
   return (
     <div className="content">

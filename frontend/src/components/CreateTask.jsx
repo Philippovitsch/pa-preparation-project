@@ -1,7 +1,7 @@
-import createTaskLogic from "../logic/CreateTaskLogic";
+import useCreateTask from "../logic/CreateTaskLogic";
 
 export default function CreateTask() {
-  const [{setName, setDescription, saveTask, successMessage}] = createTaskLogic();
+  const [{setName, setDescription, saveTask, successMessage}] = useCreateTask();
   
   return (
     <div className="content">

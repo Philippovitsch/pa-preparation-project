@@ -1,7 +1,7 @@
-import logoutLogic from "../logic/LogoutLogic";
+import useLogout from "../logic/LogoutLogic";
 
 export default function Logout() {
-  const [] = logoutLogic();
+  const [] = useLogout();
 
   return (
     <div className="content">

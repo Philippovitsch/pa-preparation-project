@@ -1,13 +1,9 @@
 import axios from "axios";
-import { Buffer } from 'buffer';
 
 const axiosInstance = axios.create();
 
 function getAxiosConfig(subDomain, requestMethod, requestBody) {
-  const username = localStorage.getItem("username");
-  const password = localStorage.getItem("password");
-  const token = `${username}:${password}`;
-  const encodedToken = Buffer.from(token).toString('base64');
+  const encodedToken = localStorage.getItem("encodedToken");
   const config = {
     method: requestMethod,
     url: "http://localhost:8080" + subDomain,

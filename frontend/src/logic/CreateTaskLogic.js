@@ -2,7 +2,7 @@ import { useState } from "react";
 import { saveNewTask } from "../functions/fetch";
 import { useNavigate } from "react-router-dom";
 
-const createTaskLogic = () => {
+const useCreateTask = () => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
@@ -29,4 +29,4 @@ const createTaskLogic = () => {
   return [{setName, setDescription, saveTask, successMessage}];
 };
 
-export default createTaskLogic;
+export default useCreateTask;

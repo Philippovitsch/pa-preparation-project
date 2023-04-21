@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { deleteTaskByName, getAllTasks } from "../functions/fetch";
 
-const taskLogic = () => {
+const useTasks = () => {
   const [tasks, setTasks] = useState([]);
 
   useEffect(() => {
@@ -25,4 +25,4 @@ const taskLogic = () => {
   return [{ tasks, deleteTask }];
 };
 
-export default taskLogic;
+export default useTasks;

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-const logoutLogic = () => {
+const useLogout = () => {
   const navigate = useNavigate();
   const performLogout = () => {
     localStorage.removeItem("username");
@@ -16,4 +16,4 @@ const logoutLogic = () => {
   return [];
 }
 
-export default logoutLogic;
+export default useLogout;
