@@ -1,12 +1,12 @@
-import useLogin from "../logic/LoginLogic";
+import useSignUp from "../logic/SignUpLogic"
 
-export default function Login() {
-  const [{setUsername, setPassword, performLogin, successMessage}] = useLogin();
-  
+export default function SignUp() {
+  const [{setUsername, setPassword, performSignUp, successMessage}] = useSignUp();
+
   return (
     <div className="content">
       <center>
-        <h2>Login:</h2>
+        <h2>Sign Up:</h2>
         <div className="card-element">
           <table>
             <tbody>
@@ -20,10 +20,10 @@ export default function Login() {
               </tr>
             </tbody>  
           </table>
-          <input type="button" value="Login" className="button" onClick={ performLogin } />
+          <input type="button" value="Sign Up" className="button" onClick={ performSignUp } />
           <div>{ successMessage }</div>
         </div>
       </center>
     </div>
-  );
+  )
 }
