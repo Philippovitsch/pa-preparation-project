@@ -9,8 +9,10 @@ const useTasks = () => {
   }, []);
 
   const getTasks = async () => {
-    const tasks = await getAllTasks();
-    setTasks(tasks);
+    const response = await getAllTasks();
+    if (response.status === 200) {
+      setTasks(response.data);
+    }
   };
 
   const deleteTask = async (task) => {

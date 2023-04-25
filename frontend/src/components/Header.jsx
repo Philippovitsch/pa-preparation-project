@@ -9,6 +9,7 @@ export default function Header() {
         <Link to="/">Home</Link>
         <Link to="login">Login</Link>
         <Link to="logout">Logout</Link>
+        <Link to="sign-up">Sign up</Link>
         <Link to="new-task">Add new task</Link>
       </div>
     </div>

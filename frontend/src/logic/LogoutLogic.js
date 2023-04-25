@@ -4,8 +4,7 @@ import { useNavigate } from "react-router-dom";
 const useLogout = () => {
   const navigate = useNavigate();
   const performLogout = () => {
-    localStorage.removeItem("username");
-    localStorage.removeItem("password");
+    localStorage.removeItem("bearerToken");
     setTimeout(() => navigate("/"), 1500);
   };
 
