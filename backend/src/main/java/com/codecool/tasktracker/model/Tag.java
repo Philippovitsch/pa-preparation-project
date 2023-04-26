@@ -7,6 +7,13 @@ import java.util.Set;
 @Entity
 public class Tag {
 
+    public Tag() {}
+
+    public Tag(String name, Set<Task> tasks) {
+        this.name = name;
+        this.tasks = tasks;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
