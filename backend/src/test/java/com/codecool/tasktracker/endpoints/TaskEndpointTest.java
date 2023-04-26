@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.HashSet;
 import java.util.List;
 
 import static org.hamcrest.Matchers.is;
@@ -41,7 +42,7 @@ public class TaskEndpointTest {
     private ObjectMapper objectMapper;
 
     @Autowired
-    JwtEncoder jwtEncoder;
+    private JwtEncoder jwtEncoder;
 
     @MockBean
     private TaskEndpointService taskEndpointService;
@@ -62,9 +63,9 @@ public class TaskEndpointTest {
     @Test
     public void getAllTasksTest() throws Exception {
         List<Task> tasks = List.of(
-                new Task("Task 1", "Test description 1", Timestamp.valueOf("2023-04-16 02:00:00.0")),
-                new Task("Task 2", "Test description 2", Timestamp.valueOf("2023-04-17 02:00:00.0")),
-                new Task("Task 3", "Test description 3", Timestamp.valueOf("2023-04-18 02:00:00.0"))
+                new Task("Task 1", "Test description 1", Timestamp.valueOf("2023-04-16 02:00:00.0"), new HashSet<>()),
+                new Task("Task 2", "Test description 2", Timestamp.valueOf("2023-04-17 02:00:00.0"), new HashSet<>()),
+                new Task("Task 3", "Test description 3", Timestamp.valueOf("2023-04-18 02:00:00.0"), new HashSet<>())
         );
         when(taskEndpointService.getAllTasks()).thenReturn(tasks);
         mockMvc.perform(get("/api/tasks/all")
@@ -82,7 +83,7 @@ public class TaskEndpointTest {
 
     @Test
     public void getTaskByNameTest() throws Exception {
-        Task task = new Task("John's Task", "Test description", Timestamp.valueOf("2023-04-19 02:00:00.0"));
+        Task task = new Task("John's Task", "Test description", Timestamp.valueOf("2023-04-19 02:00:00.0"), new HashSet<>());
         when(taskEndpointService.getTaskByName(any())).thenReturn(task);
         mockMvc.perform(get("/api/tasks/John")
                         .header("Authorization", generateBearerToken())
@@ -110,7 +111,7 @@ public class TaskEndpointTest {
 
     @Test
     public void saveTaskTest() throws Exception {
-        Task task = new Task("Phil's Task", "Test description", Timestamp.valueOf("2023-04-20 02:00:00.0"));
+        Task task = new Task("Phil's Task", "Test description", Timestamp.valueOf("2023-04-20 02:00:00.0"), new HashSet<>());
         when(taskEndpointService.saveTask(any())).thenReturn(task);
         mockMvc.perform(post("/api/tasks")
                         .header("Authorization", generateBearerToken())
@@ -127,7 +128,7 @@ public class TaskEndpointTest {
 
     @Test
     public void saveTaskThrowsError() throws Exception {
-        Task task = new Task("Phil's Task", "Test description", Timestamp.valueOf("2023-04-20 02:00:00.0"));
+        Task task = new Task("Phil's Task", "Test description", Timestamp.valueOf("2023-04-20 02:00:00.0"), new HashSet<>());
         when(taskEndpointService.saveTask(any())).thenReturn(null);
         mockMvc.perform(post("/api/tasks")
                         .header("Authorization", generateBearerToken())
@@ -141,7 +142,7 @@ public class TaskEndpointTest {
 
     @Test
     public void updateTaskByNameTest() throws Exception {
-        Task task = new Task("El's Task", "Test description", Timestamp.valueOf("2023-04-21 02:00:00.0"));
+        Task task = new Task("El's Task", "Test description", Timestamp.valueOf("2023-04-21 02:00:00.0"), new HashSet<>());
         when(taskEndpointService.updateTaskByName(any(), any())).thenReturn(task);
         mockMvc.perform(put("/api/tasks/El")
                         .header("Authorization", generateBearerToken())
@@ -158,7 +159,7 @@ public class TaskEndpointTest {
 
     @Test
     public void updateTaskByNameThrowsError() throws Exception {
-        Task task = new Task("El's Task", "Test description", Timestamp.valueOf("2023-04-21 02:00:00.0"));
+        Task task = new Task("El's Task", "Test description", Timestamp.valueOf("2023-04-21 02:00:00.0"), new HashSet<>());
         when(taskEndpointService.updateTaskByName(any(), any())).thenReturn(null);
         mockMvc.perform(put("/api/tasks/El")
                         .header("Authorization", generateBearerToken())
@@ -172,7 +173,7 @@ public class TaskEndpointTest {
 
     @Test
     public void deleteTaskByNameTest() throws Exception {
-        Task task = new Task("Emad's Task", "Test description", Timestamp.valueOf("2023-04-22 02:00:00.0"));
+        Task task = new Task("Emad's Task", "Test description", Timestamp.valueOf("2023-04-22 02:00:00.0"), new HashSet<>());
         when(taskEndpointService.deleteTaskByName(any())).thenReturn(task);
         mockMvc.perform(delete("/api/tasks/Emad")
                         .contentType(MediaType.APPLICATION_JSON)
