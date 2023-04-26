@@ -59,3 +59,9 @@ export function deleteTaskByName(name) {
   const axiosConfig = getAxiosConfig(`/api/tasks/${name}`, "DELETE", token, {});
   return fetchData(axiosConfig, token);
 }
+
+export function getAllTags() {
+  const token = "Bearer " + localStorage.getItem("bearerToken");
+  const axiosConfig = getAxiosConfig("/api/tags/all", "GET", token, {});
+  return fetchData(axiosConfig, token);
+}

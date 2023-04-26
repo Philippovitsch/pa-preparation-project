@@ -1,7 +1,7 @@
 import useCreateTask from "../logic/CreateTaskLogic";
 
 export default function CreateTask() {
-  const [{setName, setDescription, saveTask, successMessage}] = useCreateTask();
+  const [{setName, setDescription, saveTask, tags, successMessage}] = useCreateTask();
   
   return (
     <div className="content">
@@ -18,8 +18,16 @@ export default function CreateTask() {
                 <td>Task description:</td>
                 <td><input type="text" onChange={ (event) => setDescription(event.target.value) }/></td>
               </tr>
-            </tbody>  
+            </tbody>
           </table>
+          {
+            tags.map(tag => (
+              <label key={tag.id} className="mr-10">
+                <input type="checkbox" data-id={ tag.id } data-name={ tag.name } />
+                <span>{ tag.name }</span>
+              </label>
+            ))
+          }
           <input type="button" value="Save task" className="button" onClick={ saveTask } />
           <div>{ successMessage }</div>
         </div>
