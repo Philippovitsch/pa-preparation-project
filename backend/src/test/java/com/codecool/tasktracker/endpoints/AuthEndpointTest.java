@@ -2,16 +2,15 @@ package com.codecool.tasktracker.endpoints;
 
 import com.codecool.tasktracker.dto.TokenDto;
 import com.codecool.tasktracker.dto.UserDataDto;
-import com.codecool.tasktracker.security.SecurityConfig;
 import com.codecool.tasktracker.service.AuthEndpointService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -19,6 +18,7 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -27,7 +27,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @WebMvcTest(AuthEndpoint.class)
-@Import(SecurityConfig.class)
 public class AuthEndpointTest {
 
     @Autowired
@@ -40,14 +39,11 @@ public class AuthEndpointTest {
     AuthEndpointService authEndpointService;
 
     @Test
+    @WithMockUser
     public void userAuthenticationSuccessTest() throws Exception {
-        UserDataDto loginData = new UserDataDto("user", "user");
         TokenDto tokenData = new TokenDto("user", "testToken");
         when(authEndpointService.authenticate(any())).thenReturn(tokenData);
-        MvcResult result = mockMvc.perform(post("/api/auth/authenticate").with(httpBasic("user", "user"))
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(loginData))
-                )
+        MvcResult result = mockMvc.perform(post("/api/auth/authenticate").with(httpBasic("user", "password")).with(csrf()))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
@@ -55,34 +51,39 @@ public class AuthEndpointTest {
     }
 
     @Test
+    @WithMockUser
+    public void userAuthenticationWithoutCredentialsThrowsError() throws Exception {
+        when(authEndpointService.authenticate(any())).thenReturn(null);
+        mockMvc.perform(post("/api/auth/authenticate").with(csrf()))
+                .andDo(print())
+                .andExpect(status().is(HttpStatus.FORBIDDEN.value()));
+    }
+
+
+    @Test
+    @WithMockUser
     public void userAuthenticationWrongPasswordThrowsError() throws Exception {
-        UserDataDto loginData = new UserDataDto("user", "wrong-password");
         when(authEndpointService.authenticate(any())).thenReturn(null);
-        mockMvc.perform(post("/api/auth/authenticate")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(loginData))
-                )
+        mockMvc.perform(post("/api/auth/authenticate").with(httpBasic("user", "wrong-password")).with(csrf()))
                 .andDo(print())
                 .andExpect(status().is(HttpStatus.FORBIDDEN.value()));
     }
 
     @Test
+    @WithMockUser
     public void userAuthenticationWrongUsernameThrowsError() throws Exception {
-        UserDataDto loginData = new UserDataDto("wrong-user", "user");
         when(authEndpointService.authenticate(any())).thenReturn(null);
-        mockMvc.perform(post("/api/auth/authenticate")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(loginData))
-                )
+        mockMvc.perform(post("/api/auth/authenticate").with(httpBasic("wrong-user", "password")).with(csrf()))
                 .andDo(print())
-                .andExpect(status().is(HttpStatus.FORBIDDEN.value()));
+                .andExpect(status().is(HttpStatus.UNAUTHORIZED.value()));
     }
 
     @Test
+    @WithMockUser
     public void signUpSuccessTest() throws Exception {
-        UserDataDto signUpData = new UserDataDto("user-2", "user-2");
+        UserDataDto signUpData = new UserDataDto("user", "password");
         when(authEndpointService.signUp(any())).thenReturn(signUpData);
-        mockMvc.perform(post("/api/auth/sign-up")
+        mockMvc.perform(post("/api/auth/sign-up").with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(signUpData))
                 )
@@ -93,10 +94,11 @@ public class AuthEndpointTest {
     }
 
     @Test
+    @WithMockUser
     public void signUpExistingUsernameThrowsError() throws Exception {
-        UserDataDto signUpData = new UserDataDto("user", "user");
+        UserDataDto signUpData = new UserDataDto("user", "password");
         when(authEndpointService.signUp(any())).thenReturn(null);
-        mockMvc.perform(post("/api/auth/sign-up")
+        mockMvc.perform(post("/api/auth/sign-up").with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(signUpData))
                 )

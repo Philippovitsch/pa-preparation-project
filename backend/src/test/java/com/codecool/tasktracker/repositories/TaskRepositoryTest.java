@@ -42,8 +42,9 @@ public class TaskRepositoryTest {
         entityManager.persist(task1);
         entityManager.persist(task2);
         entityManager.persist(task3);
-        Task returnedTask = taskRepository.getTaskByName(task1.getName());
-        assertEquals(task1, returnedTask);
+        assertEquals(task1, taskRepository.getTaskByName(task1.getName()));
+        assertEquals(task2, taskRepository.getTaskByName(task2.getName()));
+        assertEquals(task3, taskRepository.getTaskByName(task3.getName()));
     }
 
 }

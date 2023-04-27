@@ -3,40 +3,38 @@ package com.codecool.tasktracker.service;
 import com.codecool.tasktracker.dto.TokenDto;
 import com.codecool.tasktracker.dto.UserDataDto;
 import com.codecool.tasktracker.security.JwtGenerator;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 public class AuthEndpointServiceTest {
 
+    @Mock
     private JwtGenerator jwtGenerator;
+
+    @Mock
     private InMemoryUserDetailsManager userDetailsManager;
+
+    @Mock
     private PasswordEncoder encoder;
-    private AuthEndpointService authEndpointService;
+
+    @Mock
     private Authentication authentication;
 
-    @BeforeEach
-    public void init() {
-        this.authentication = mock(Authentication.class);
-        this.jwtGenerator = mock(JwtGenerator.class);
-        this.userDetailsManager = mock(InMemoryUserDetailsManager.class);
-        this.encoder = mock(PasswordEncoder.class);
-        this.authEndpointService = new AuthEndpointService(
-                jwtGenerator,
-                userDetailsManager,
-                encoder
-        );
-    }
+    @InjectMocks
+    private AuthEndpointService authEndpointService;
 
     @Test
     public void authenticateTestSuccess() {

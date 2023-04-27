@@ -2,8 +2,11 @@ package com.codecool.tasktracker.service;
 
 import com.codecool.tasktracker.model.Task;
 import com.codecool.tasktracker.repositories.TaskRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.sql.Timestamp;
 import java.util.HashSet;
@@ -13,16 +16,14 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 public class TaskEndpointServiceTest {
 
+    @Mock
     private TaskRepository taskRepository;
-    private TaskEndpointService taskEndpointService;
 
-    @BeforeEach
-    public void init() {
-        taskRepository = mock(TaskRepository.class);
-        taskEndpointService = new TaskEndpointService(taskRepository);
-    }
+    @InjectMocks
+    private TaskEndpointService taskEndpointService;
 
     @Test
     public void getAllTasksTest() {
