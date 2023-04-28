@@ -17,7 +17,7 @@ const useCreateTask = () => {
       }
     };
     fetchTags();
-  })
+  }, [])
 
   const navigate = useNavigate();
 
