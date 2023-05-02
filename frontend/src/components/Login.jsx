@@ -1,8 +1,8 @@
 import useLogin from "../logic/LoginLogic";
 
-export default function Login() {
+export default function Login(props) {
   const [{setUsername, setPassword, performLogin, successMessage}] = useLogin();
-  
+
   return (
     <div className="content">
       <center>
@@ -20,7 +20,7 @@ export default function Login() {
               </tr>
             </tbody>  
           </table>
-          <input type="button" value="Login" className="button" onClick={ performLogin } />
+          <input type="button" value="Login" className="button" onClick={() => performLogin(props.setUser) } />
           <div>{ successMessage }</div>
         </div>
       </center>

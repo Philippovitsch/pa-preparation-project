@@ -10,14 +10,16 @@ const useLogin = () => {
 
   const navigate = useNavigate();
 
-  const performLogin = async () => {
+  const performLogin = async (setUser) => {
     const token = `${username}:${password}`;
     const encodedToken = Buffer.from(token).toString('base64');
     const response = await getBearerToken(encodedToken);
 
     if (response.status === 200) {
       localStorage.setItem("bearerToken", response.data.token);
-      setSuccessMessage("Login successful!")
+      localStorage.setItem("user", username);
+      setUser(username);
+      setSuccessMessage("Login successful!");
       setTimeout(() => navigate("/"), 1500);
     } else {
       setSuccessMessage("Login failed!")

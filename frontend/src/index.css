@@ -22,16 +22,25 @@ a {
   margin: 0 12px 0 12px;
 }
 
-.navbar {
+.login-status {
   margin-left: auto;
   margin-right: 12px;
+}
+
+.navbar {
+  background-color: lightblue;
+  position: absolute;
+  padding: 10px;
+  top: 100px;
+  left: 10px;
+  right: 10px;
 }
 
 .content {
   background-color: whitesmoke;
   position: absolute;
   padding: 10px;
-  top: 100px;
+  top: 150px;
   bottom: 70px;
   left: 10px;
   right: 10px;
