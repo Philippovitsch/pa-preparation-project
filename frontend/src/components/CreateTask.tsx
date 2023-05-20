@@ -2,7 +2,7 @@ import useCreateTask from "../logic/CreateTaskLogic";
 
 export default function CreateTask() {
   const [{setName, setDescription, saveTask, tags, successMessage}] = useCreateTask();
-  
+
   return (
     <div className="content">
       <center>

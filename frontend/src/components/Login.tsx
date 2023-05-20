@@ -1,6 +1,10 @@
 import useLogin from "../logic/LoginLogic";
 
-export default function Login(props) {
+export default function Login(props:
+  {
+    setUser: (user: string | null) => void
+  }
+) {
   const [{setUsername, setPassword, performLogin, successMessage}] = useLogin();
 
   return (

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-const useLogout = (setUser) => {
+const useLogout = (setUser: (user: string | null) => void) => {
   const navigate = useNavigate();
   const performLogout = () => {
     localStorage.removeItem("bearerToken");
@@ -13,8 +13,6 @@ const useLogout = (setUser) => {
   useEffect(() => {
     performLogout();
   }, []);
-  
-  return [];
 }
 
 export default useLogout;

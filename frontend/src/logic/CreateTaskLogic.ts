@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import { getAllTags, saveNewTask } from "../functions/fetch";
 import { useNavigate } from "react-router-dom";
+import { TagModel } from "../model/TagModel";
+import { TaskModel } from "../model/TaskModel";
 
 const useCreateTask = () => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-  const [tags, setTags] = useState([]);
+  const [tags, setTags] = useState<TagModel[]>([]);
   
   useEffect(() => {
     const fetchTags = async () => {
@@ -23,14 +25,17 @@ const useCreateTask = () => {
 
   const saveTask = async () => {
     const checkedTags = document.querySelectorAll('input[type=checkbox]:checked');
-    const tags = [];
+    const tags: TagModel[] = [];
     checkedTags.forEach(tag => {
-      tags.push({
-        id: tag.getAttribute("data-id"),
-        name: tag.getAttribute("data-name") 
-      })
+      const id = tag.getAttribute("data-id");
+      const name = tag.getAttribute("data-name");
+      const newTag: TagModel = {
+        id: (id !== null) ? parseInt(id) : -1,
+        name:  (name !== null) ? name : ""
+      }
+      tags.push(newTag)
     })
-    const newTask = {
+    const newTask: TaskModel = {
       name: name,
       description: description,
       timestamp: new Date().toISOString(),

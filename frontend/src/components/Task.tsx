@@ -1,4 +1,11 @@
-export default function Task(props) {
+import { TaskModel } from "../model/TaskModel";
+
+export default function Task(props:
+  {
+    task: TaskModel,
+    deleteTask: (task: TaskModel) => Promise<void>
+  }
+) {
   return (
     <div className="card-element">
       <b>{ props.task.name }</b>: { props.task.description }

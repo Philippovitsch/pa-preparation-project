@@ -1,4 +1,8 @@
-export default function Header(props) {
+export default function Header(props:
+  {
+    user: string | null
+  }
+) {
   return (
     <div className="header">
       <img className="logo" src="/icon.png" alt="logo" height="60px" />

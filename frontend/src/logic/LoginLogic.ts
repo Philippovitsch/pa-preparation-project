@@ -10,7 +10,7 @@ const useLogin = () => {
 
   const navigate = useNavigate();
 
-  const performLogin = async (setUser) => {
+  const performLogin = async (setUser: (user: string | null) => void) => {
     const token = `${username}:${password}`;
     const encodedToken = Buffer.from(token).toString('base64');
     const response = await getBearerToken(encodedToken);

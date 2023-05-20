@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Buffer } from 'buffer';
-import { getBearerToken, signUp } from "../functions/fetch";
+import { signUp } from "../functions/fetch";
+import { UserDataModel } from "../model/UserDataModel";
 
 const useSignUp = () => {
   const [username, setUsername] = useState("");
@@ -11,7 +11,7 @@ const useSignUp = () => {
   const navigate = useNavigate();
 
   const performSignUp = async () => {
-    const userData = {
+    const userData: UserDataModel = {
         username: username,
         password: password
     }

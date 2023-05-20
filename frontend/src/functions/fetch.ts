@@ -1,10 +1,13 @@
 import axios from "axios";
+import { TaskModel } from "../model/TaskModel";
+import { UserDataModel } from "../model/UserDataModel";
+import { ConfigModel } from "../model/ConfigModel";
 
 const url = "http://localhost:8080";
 const axiosInstance = axios.create();
 
-function getAxiosConfig(subDomain, requestMethod, token, requestBody) {
-  const config = {
+function getAxiosConfig(subDomain: string, requestMethod: string, token: string, requestBody: object) {
+  const config: ConfigModel = {
     method: requestMethod,
     url: url + subDomain,
     headers: {
@@ -15,7 +18,7 @@ function getAxiosConfig(subDomain, requestMethod, token, requestBody) {
   return config;
 }
 
-function fetchData(axiosConfig, token) {
+function fetchData(axiosConfig: ConfigModel, token: string) {
   if (token === "Bearer null") {
     return { status: -1 }
   }
@@ -30,13 +33,13 @@ function fetchData(axiosConfig, token) {
     });
 }
 
-export function getBearerToken(encodedToken) {
+export function getBearerToken(encodedToken: string) {
   const token = "Basic " + encodedToken;
   const axiosConfig = getAxiosConfig("/api/auth/authenticate", "POST", token, {});
   return fetchData(axiosConfig, token);
 }
 
-export function signUp(userData) {
+export function signUp(userData: UserDataModel) {
   const token = ""
   const axiosConfig = getAxiosConfig("/api/auth/sign-up", "POST", token, userData);
   return fetchData(axiosConfig, token);
@@ -48,13 +51,13 @@ export function getAllTasks() {
   return fetchData(axiosConfig, token);
 }
 
-export function saveNewTask(task) {
+export function saveNewTask(task: TaskModel) {
   const token = "Bearer " + localStorage.getItem("bearerToken");
   const axiosConfig = getAxiosConfig("/api/tasks", "POST", token, task);
   return fetchData(axiosConfig, token);
 }
 
-export function deleteTaskByName(name) {
+export function deleteTaskByName(name: string) {
   const token = "Bearer " + localStorage.getItem("bearerToken");
   const axiosConfig = getAxiosConfig(`/api/tasks/${name}`, "DELETE", token, {});
   return fetchData(axiosConfig, token);

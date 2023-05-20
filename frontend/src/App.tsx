@@ -17,7 +17,7 @@ export default function App() {
       <Header user={ user } />
       <Navbar />
       <Routes>
-        <Route path="/" exact element={ <Tasks /> } />
+        <Route path="/" element={ <Tasks /> } />
         <Route path="/new-task" element={ <CreateTask /> } />
         <Route path="/login" element={ <Login setUser={ setUser } /> } />
         <Route path="/logout" element={ <Logout setUser={ setUser } /> } />
