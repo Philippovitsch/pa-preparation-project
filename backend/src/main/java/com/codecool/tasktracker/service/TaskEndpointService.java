@@ -19,6 +19,10 @@ public class TaskEndpointService {
         return taskRepository.findAll();
     }
 
+    public List<Task> getTasksByUsername(String username) {
+        return taskRepository.getTaskByUsername(username);
+    }
+
     public Task getTaskByName(String name) {
         return taskRepository.getTaskByName(name);
     }

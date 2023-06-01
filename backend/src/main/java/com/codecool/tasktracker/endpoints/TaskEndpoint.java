@@ -23,6 +23,11 @@ public class TaskEndpoint {
         return taskEndpointService.getAllTasks();
     }
 
+    @GetMapping("/user/{username}")
+    public List<Task> getTaskByUsername(@PathVariable String username) {
+        return taskEndpointService.getTasksByUsername(username);
+    }
+
     @GetMapping("/{name}")
     public Task getTaskByName(@PathVariable String name) {
         Task task = taskEndpointService.getTaskByName(name);
