@@ -1,12 +1,10 @@
 package com.codecool.tasktracker.dto;
 
-import org.springframework.security.core.GrantedAuthority;
-
-import java.util.Collection;
+import java.util.List;
 
 public record UserDetailsDto(
         String username,
-        Collection<? extends GrantedAuthority> authorities,
+        List<String> authorities,
         boolean accountNonExpired,
         boolean accountNonLocked,
         boolean credentialsNonExpired,
