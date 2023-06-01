@@ -1,32 +1,9 @@
-import { useEffect, useState } from "react";
 import { Container, Header, Message, Table } from "semantic-ui-react";
-import { getTasksByUsername, getUserData } from "../functions/fetch";
-import { UserDetailsModel } from "../model/UserDetailsModel";
-import { TaskModel } from "../model/TaskModel";
 import { Link } from "react-router-dom";
+import useUser from "../logic/UserLogic";
 
 export default function User() {
-  const [userDetails, setUserDetails] = useState<UserDetailsModel>();
-  const [tasks, setTasks] = useState<TaskModel[]>([]);
-
-  useEffect(() => {
-    getUser();
-    getTasks();
-  }, []);
-
-  const getUser = async () => {
-    const response = await getUserData();
-    if (response.status === 200) {     
-      setUserDetails(response.data);
-    }
-  };
-
-  const getTasks = async () => {
-    const response = await getTasksByUsername();
-    if (response.status === 200) {
-      setTasks(response.data);
-    }
-  };
+  const [{userDetails, tasks}] = useUser();
 
   return (
     <Container text style={{ paddingTop: "100px", paddingBottom: "100px" }}>
