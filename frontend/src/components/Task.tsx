@@ -14,7 +14,7 @@ export default function Task(props:
     { props.task.tags.length !== 0 &&
       <p><b>Tags</b>: { props.task.tags.map(task => task.name).join(", ") }</p>
     }
-    <i className="fs-15">Saved on { new Date(props.task.timestamp).toDateString() }</i>
+    <i className="fs-15">Saved on { new Date(props.task.timestamp).toDateString() } by <b>{ props.task.username }</b></i>
     <img
       className="delete-icon"
       src="/delete.png"

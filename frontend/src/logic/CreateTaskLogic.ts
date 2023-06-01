@@ -43,6 +43,7 @@ const useCreateTask = () => {
       tags.push(newTag)
     })
     const newTask: TaskModel = {
+      username: <string> localStorage.getItem("username"),
       name: name,
       description: description,
       timestamp: new Date().toISOString(),
