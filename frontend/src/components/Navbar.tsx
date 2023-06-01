@@ -1,13 +1,29 @@
 import { Link } from "react-router-dom";
+import { Container, Image, Menu } from "semantic-ui-react"
 
-export default function Navbar() {
+export default function Navbar(props:
+  {
+    user: string | null
+  }
+) {
   return (
-    <div className="navbar">
-      <Link to="/">Home</Link>
-      <Link to="login">Login</Link>
-      <Link to="logout">Logout</Link>
-      <Link to="sign-up">Sign up</Link>
-      <Link to="new-task">Add new task</Link>
-    </div>
-  )
+    <Menu fixed="top" inverted>
+      <Container>
+        <Menu.Item as={Link} to="/" header>
+          <Image size="mini" src="/icon.png" style={{ marginRight: "1.5em" }} />
+          Task Tracker
+        </Menu.Item>
+        <Menu.Item as={Link} to="/login">Login</Menu.Item>
+        <Menu.Item as={Link} to="/logout">Logout</Menu.Item>
+        <Menu.Item as={Link} to="/sign-up">Sign Up</Menu.Item>
+        <Menu.Item as={Link} to="/new-task">Add new task</Menu.Item>
+        <div className='login-status'>
+          { !props.user
+            ? <i>Not logged in</i>
+            : <i>Logged in as: <Link to="/user"><b>{ props.user }</b></Link></i>
+          }
+      </div>
+      </Container>
+    </Menu>
+  );
 }

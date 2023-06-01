@@ -1,3 +1,4 @@
+import { Container, Header, Message } from 'semantic-ui-react';
 import useLogout from "../logic/LogoutLogic";
 
 export default function Logout(props:
@@ -8,11 +9,9 @@ export default function Logout(props:
   useLogout(props.setUser);
 
   return (
-    <div className="content">
-      <center>
-        <h2>Logout:</h2>
-        Performing logout...
-      </center>
-    </div>
+    <Container text style={{ paddingTop: "100px", paddingBottom: "100px" }}>
+      <Header as="h2" style={{ marginBottom: "25px" }}>User Logout</Header>
+      <Message info content="Performing logout..." />
+    </Container>
   );
 }

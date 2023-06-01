@@ -1,37 +1,34 @@
+import { Button, Checkbox, Container, Form, Header, Message, Segment } from "semantic-ui-react";
 import useCreateTask from "../logic/CreateTaskLogic";
 
 export default function CreateTask() {
-  const [{setName, setDescription, saveTask, tags, successMessage}] = useCreateTask();
+  const [{setName, setDescription, saveTask, tags, userMessage}] = useCreateTask();
 
   return (
-    <div className="content">
-      <center>
-        <h2>Create new task:</h2>
-        <div className="card-element">
-          <table>
-            <tbody>
-              <tr>
-                <td>Task name:</td>
-                <td><input type="text" id="task-name" onChange={ (event) => setName(event.target.value) }/></td>
-              </tr>
-              <tr>
-                <td>Task description:</td>
-                <td><input type="text" onChange={ (event) => setDescription(event.target.value) }/></td>
-              </tr>
-            </tbody>
-          </table>
+    <Container text style={{ paddingTop: "100px", paddingBottom: "100px" }}>
+      <Header as="h2" style={{ marginBottom: "25px" }}>Create new task</Header>
+      { userMessage !== undefined && userMessage.level === "success" &&
+        <Message success content={ userMessage.text } /> }
+      { userMessage !== undefined && userMessage.level === "error" &&
+        <Message error content={ userMessage.text } /> }
+      <Form>
+        <Form.Field>
+          <label>Task name:</label>
+          <input placeholder="Task name" type="text" id="task-name" onChange={ (event) => setName(event.target.value) } />
+        </Form.Field>
+        <Form.Field>
+          <label>Task description</label>
+          <input placeholder="Task description" type="text" onChange={ (event) => setDescription(event.target.value) } />
+        </Form.Field>
+        <Segment style={{ marginTop: "30px" }}>
           {
             tags.map(tag => (
-              <label key={tag.id} className="mr-10">
-                <input type="checkbox" data-id={ tag.id } data-name={ tag.name } />
-                <span>{ tag.name }</span>
-              </label>
+              <Checkbox key={tag.id} style={{ marginRight: "25px" }} data-id={ tag.id } data-name={ tag.name } label={ tag.name } />
             ))
           }
-          <input type="button" value="Save task" className="button" onClick={ saveTask } />
-          <div>{ successMessage }</div>
-        </div>
-      </center>
-    </div>
+        </Segment>
+        <Button type="submit" style={{ marginTop: "15px" }} value="Save task" className="button" onClick={ saveTask }>Add task</Button>
+      </Form>
+    </Container>
   );
 }

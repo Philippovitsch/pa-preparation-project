@@ -3,11 +3,12 @@ import { getAllTags, saveNewTask } from "../functions/fetch";
 import { useNavigate } from "react-router-dom";
 import { TagModel } from "../model/TagModel";
 import { TaskModel } from "../model/TaskModel";
+import { UserMessage } from "../model/UserMessage";
 
 const useCreateTask = () => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
+  const [userMessage, setUserMessage] = useState<UserMessage>();
   const [tags, setTags] = useState<TagModel[]>([]);
   
   useEffect(() => {
@@ -24,7 +25,13 @@ const useCreateTask = () => {
   const navigate = useNavigate();
 
   const saveTask = async () => {
-    const checkedTags = document.querySelectorAll('input[type=checkbox]:checked');
+    if (name === "" || description === "") {
+      setUserMessage({level: "error", text: "Please enter a name and a description!"});
+      return;
+    }
+
+    const checkedTags = document.querySelectorAll(".checked");
+    
     const tags: TagModel[] = [];
     checkedTags.forEach(tag => {
       const id = tag.getAttribute("data-id");
@@ -45,14 +52,14 @@ const useCreateTask = () => {
     const response = await saveNewTask(newTask);
     
     if (response.status == 200) {
-      setSuccessMessage("Successfully saved card!");
+      setUserMessage({level: "success", text: "Successfully saved card!"});
       setTimeout(() => navigate("/"), 1500);
     } else {
-      setSuccessMessage("Error while saving card");
+      setUserMessage({level: "error", text: "Error while saving card"});
     }
   };
 
-  return [{setName, setDescription, saveTask, tags, successMessage}];
+  return [{setName, setDescription, saveTask, tags, userMessage}];
 };
 
 export default useCreateTask;
