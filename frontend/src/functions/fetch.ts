@@ -51,6 +51,13 @@ export function getAllTasks() {
   return fetchData(axiosConfig, token);
 }
 
+export function getTasksByUsername() {
+  const token = "Bearer " + localStorage.getItem("bearerToken");
+  const username = localStorage.getItem("user");
+  const axiosConfig = getAxiosConfig(`/api/tasks/user/${username}`, "GET", token, {});
+  return fetchData(axiosConfig, token);
+}
+
 export function saveNewTask(task: TaskModel) {
   const token = "Bearer " + localStorage.getItem("bearerToken");
   const axiosConfig = getAxiosConfig("/api/tasks", "POST", token, task);
@@ -67,4 +74,11 @@ export function getAllTags() {
   const token = "Bearer " + localStorage.getItem("bearerToken");
   const axiosConfig = getAxiosConfig("/api/tags/all", "GET", token, {});
   return fetchData(axiosConfig, token);
+}
+
+export function getUserData() {
+  const token = "Bearer " + localStorage.getItem("bearerToken");
+  const username = localStorage.getItem("user");
+  const axiosConfig = getAxiosConfig(`/api/user/${username}`, "GET", token, {})
+  return fetchData(axiosConfig, token)
 }
