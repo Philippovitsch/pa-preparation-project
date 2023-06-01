@@ -24,7 +24,7 @@ export default function Login(props:
           <label>Password</label>
           <input placeholder="Password" type="password" onChange={ (event) => setPassword(event.target.value) } />
         </Form.Field>
-        <Button type="submit" style={{ marginTop: "15px" }} value="Login" className="button" onClick={() => performLogin(props.setUser) }>Login</Button>
+        <Button type="submit" style={{ marginTop: "15px" }} value="Login" onClick={() => performLogin(props.setUser) }>Login</Button>
       </Form>
     </Container>
   );

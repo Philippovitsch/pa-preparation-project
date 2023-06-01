@@ -23,7 +23,7 @@ export default function SignUp() {
         <Form.Field>
           <Checkbox id="tos" label="I agree to the Terms and Conditions" />
         </Form.Field>
-        <Button type="submit" style={{ marginTop: "15px" }} value="Sign up" className="button" onClick={ performSignUp } >Submit</Button>
+        <Button type="submit" style={{ marginTop: "15px" }} value="Sign up" onClick={ performSignUp } >Submit</Button>
       </Form>
     </Container>
   )

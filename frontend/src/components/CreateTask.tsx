@@ -27,7 +27,7 @@ export default function CreateTask() {
             ))
           }
         </Segment>
-        <Button type="submit" style={{ marginTop: "15px" }} value="Save task" className="button" onClick={ saveTask }>Add task</Button>
+        <Button type="submit" style={{ marginTop: "15px" }} value="Save task" onClick={ saveTask }>Add task</Button>
       </Form>
     </Container>
   );

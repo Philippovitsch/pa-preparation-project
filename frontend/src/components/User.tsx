@@ -69,7 +69,7 @@ export default function User() {
               { task.tags.length !== 0 &&
                 <li><b>Tags</b>: { task.tags.map(task => task.name).join(", ") }</li>
               }
-              <li><i className="fs-15">Saved on { new Date(task.timestamp).toDateString() }</i></li>
+              <li><i>Saved on { new Date(task.timestamp).toDateString() }</i></li>
             </ul>
         </Message>
         ))
