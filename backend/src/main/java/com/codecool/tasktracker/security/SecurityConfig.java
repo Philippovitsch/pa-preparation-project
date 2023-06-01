@@ -52,6 +52,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/tasks/**").hasRole("ROLE_USER")
                         .requestMatchers("/api/tasks/**").hasRole("ROLE_ADMIN")
                         .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/user/**").permitAll()
                         .requestMatchers(toH2Console()).permitAll()
                         .anyRequest().authenticated()
                 )
