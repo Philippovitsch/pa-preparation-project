@@ -9,3 +9,10 @@
     float: right;
     cursor: pointer;
 }
+
+.task-option {
+    cursor: pointer;
+    color: #4183c4;
+    margin-right: 10px;
+    font-style: italic;
+}
