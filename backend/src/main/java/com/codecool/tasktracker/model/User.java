@@ -19,6 +19,7 @@ public class User {
     private String password;
 
     @ElementCollection(fetch = FetchType.EAGER)
+    @JsonIgnore
     private Set<String> authorities;
 
     public long getId() {

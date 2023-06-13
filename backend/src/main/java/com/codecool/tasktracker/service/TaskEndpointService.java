@@ -1,18 +1,23 @@
 package com.codecool.tasktracker.service;
 
 import com.codecool.tasktracker.model.Task;
+import com.codecool.tasktracker.model.User;
 import com.codecool.tasktracker.repositories.TaskRepository;
+import com.codecool.tasktracker.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class TaskEndpointService {
 
     private final TaskRepository taskRepository;
+    private final UserRepository userRepository;
 
-    public TaskEndpointService(TaskRepository taskRepository) {
+    public TaskEndpointService(TaskRepository taskRepository, UserRepository userRepository) {
         this.taskRepository = taskRepository;
+        this.userRepository = userRepository;
     }
 
     public List<Task> getAllTasks() {
@@ -20,7 +25,8 @@ public class TaskEndpointService {
     }
 
     public List<Task> getTasksByUsername(String username) {
-        return taskRepository.getTaskByUsername(username);
+        User user = userRepository.findUserByUsername(username);
+        return (user != null) ? taskRepository.getTaskByUserId(user.getId()) : new ArrayList<>();
     }
 
     public Task getTaskByName(String name) {
