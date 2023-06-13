@@ -2,24 +2,25 @@ package com.codecool.tasktracker.service;
 
 import com.codecool.tasktracker.dto.TokenDto;
 import com.codecool.tasktracker.dto.UserDataDto;
+import com.codecool.tasktracker.model.User;
 import com.codecool.tasktracker.security.JwtGenerator;
+import com.codecool.tasktracker.security.UserDetailsServiceImpl;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.stereotype.Service;
+
+import java.util.Set;
 
 @Service
 public class AuthEndpointService {
 
     private final JwtGenerator jwtGenerator;
-    private final InMemoryUserDetailsManager userDetailsManager;
+    private final UserDetailsServiceImpl userDetailsService;
     private final PasswordEncoder encoder;
 
-    public AuthEndpointService(JwtGenerator jwtGenerator, InMemoryUserDetailsManager userDetailsManager, PasswordEncoder encoder) {
+    public AuthEndpointService(JwtGenerator jwtGenerator, UserDetailsServiceImpl userDetailsService, PasswordEncoder encoder) {
         this.jwtGenerator = jwtGenerator;
-        this.userDetailsManager = userDetailsManager;
+        this.userDetailsService = userDetailsService;
         this.encoder = encoder;
     }
 
@@ -34,16 +35,15 @@ public class AuthEndpointService {
     }
 
     public UserDataDto signUp(UserDataDto userDataDto) {
-        if (userDetailsManager.userExists(userDataDto.username())) {
+        if (userDetailsService.userExists(userDataDto.username())) {
             return null;
         }
 
-        UserDetails user = User.builder()
-                .username(userDataDto.username())
-                .password(encoder.encode(userDataDto.password()))
-                .roles("USER")
-                .build();
-        userDetailsManager.createUser(user);
+        User user = new User();
+        user.setUsername(userDataDto.username());
+        user.setPassword(encoder.encode(userDataDto.password()));
+        user.setAuthorities(Set.of("USER"));
+        userDetailsService.createUser(user);
         return userDataDto;
     }
 

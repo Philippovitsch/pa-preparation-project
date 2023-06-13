@@ -15,8 +15,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
@@ -25,7 +23,6 @@ import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -47,11 +44,11 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .headers().frameOptions().sameOrigin().and()
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(HttpMethod.GET,"/api/tags/**").hasRole("ROLE_USER")
-                        .requestMatchers(HttpMethod.GET,"/api/tasks/**").hasRole("ROLE_USER")
-                        .requestMatchers(HttpMethod.POST, "/api/tasks/**").hasRole("ROLE_USER")
-                        .requestMatchers("/api/tasks/**").hasRole("ROLE_ADMIN")
-                        .requestMatchers("/api/user/**").hasRole("ROLE_USER")
+                        .requestMatchers(HttpMethod.GET,"/api/tags/**").hasRole("USER")
+                        .requestMatchers(HttpMethod.GET,"/api/tasks/**").hasRole("USER")
+                        .requestMatchers(HttpMethod.POST, "/api/tasks/**").hasRole("USER")
+                        .requestMatchers("/api/tasks/**").hasRole("ADMIN")
+                        .requestMatchers("/api/user/**").hasRole("USER")
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers(toH2Console()).permitAll()
                         .anyRequest().authenticated()
@@ -71,21 +68,6 @@ public class SecurityConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
-    }
-
-    @Bean
-    public InMemoryUserDetailsManager userDetailsService() {
-        UserDetails user = User.builder()
-                .username("user")
-                .password(encoder().encode("user"))
-                .roles("USER")
-                .build();
-        UserDetails admin = User.builder()
-                .username("admin")
-                .password(encoder().encode("admin"))
-                .roles("USER", "ADMIN")
-                .build();
-        return new InMemoryUserDetailsManager(user, admin);
     }
 
     @Bean

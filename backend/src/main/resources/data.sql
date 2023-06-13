@@ -1,3 +1,12 @@
+INSERT INTO users (id, username, password) VALUES
+    (default, 'user', '$2a$12$s.zqhXspLQkmj7wFjCDNfeGTnykviA5a9ZVZWysi4ydFcCRJbmLxi'),
+    (default, 'admin', '$2a$12$JdObYrGEN4C2t2YnntNKVe.ZhvWtJoO7hNLUDpiCypJti3Qe/BJq.');
+
+INSERT INTO user_authorities (user_id, authorities) VALUES
+    (1, 'USER'),
+    (2, 'USER'),
+    (2, 'ADMIN');
+
 INSERT INTO tag (id, name) VALUES
     (default, 'High priority'),
     (default, 'Medium priority'),
