@@ -20,7 +20,7 @@ export default function User() {
               </Table.Row>
               <Table.Row>
                 <Table.Cell>Roles</Table.Cell>
-                <Table.Cell><b>{ userDetails?.authorities.map(authority => authority.substring(5)).join(", ") }</b></Table.Cell>
+                <Table.Cell><b>{ userDetails?.authorities.join(", ") }</b></Table.Cell>
               </Table.Row>
               <Table.Row>
                 <Table.Cell>AccountNonExpired</Table.Cell>
