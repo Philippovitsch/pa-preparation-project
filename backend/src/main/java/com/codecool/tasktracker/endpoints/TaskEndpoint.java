@@ -1,5 +1,6 @@
 package com.codecool.tasktracker.endpoints;
 
+import com.codecool.tasktracker.dto.TaskDto;
 import com.codecool.tasktracker.exceptions.TaskAlreadyExistsException;
 import com.codecool.tasktracker.exceptions.TaskNotFoundException;
 import com.codecool.tasktracker.model.Task;
@@ -36,14 +37,14 @@ public class TaskEndpoint {
     }
 
     @PostMapping
-    public Task saveTask(@RequestBody Task newTask) {
+    public Task saveTask(@RequestBody TaskDto newTask) {
         Task task = taskEndpointService.saveTask(newTask);
         if (task == null) throw new TaskAlreadyExistsException("Task already exists!");
         return task;
     }
 
     @PutMapping("/{name}")
-    public Task updateTaskByName(@PathVariable String name, @RequestBody Task updatedTask) {
+    public Task updateTaskByName(@PathVariable String name, @RequestBody TaskDto updatedTask) {
         Task task = taskEndpointService.updateTaskByName(name, updatedTask);
         if (task == null) throw new TaskNotFoundException("Task " + name + " not found!");
         return task;

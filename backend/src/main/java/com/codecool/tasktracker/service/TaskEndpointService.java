@@ -1,5 +1,6 @@
 package com.codecool.tasktracker.service;
 
+import com.codecool.tasktracker.dto.TaskDto;
 import com.codecool.tasktracker.model.Task;
 import com.codecool.tasktracker.model.User;
 import com.codecool.tasktracker.repositories.TaskRepository;
@@ -33,17 +34,30 @@ public class TaskEndpointService {
         return taskRepository.getTaskByName(name);
     }
 
-    public Task saveTask(Task newTask) {
-        Task task = taskRepository.getTaskByName(newTask.getName());
-        return (task == null) ? taskRepository.save(newTask) : null;
+    public Task saveTask(TaskDto taskDto) {
+        Task task = taskRepository.getTaskByName(taskDto.name());
+        User user = userRepository.findUserByUsername(taskDto.user());
+
+        if (task != null || user == null) {
+            return null;
+        }
+
+        Task newTask = new Task();
+        newTask.setUser(user);
+        newTask.setName(taskDto.name());
+        newTask.setDescription(taskDto.description());
+        newTask.setTimestamp(taskDto.timestamp());
+        newTask.setTags(taskDto.tags());
+
+        return taskRepository.save(newTask);
     }
 
-    public Task updateTaskByName(String name, Task updatedTask) {
+    public Task updateTaskByName(String name, TaskDto updatedTask) {
         Task task = taskRepository.getTaskByName(name);
         if (task != null) {
-            task.setName(updatedTask.getName());
-            task.setDescription(updatedTask.getDescription());
-            task.setTimestamp(updatedTask.getTimestamp());
+            task.setName(updatedTask.name());
+            task.setDescription(updatedTask.description());
+            task.setTags(updatedTask.tags());
             taskRepository.save(task);
         }
         return task;

@@ -3,7 +3,7 @@ import {UserModel} from "./UserModel.ts";
 
 export type TaskModel = {
   id?: number,
-  user: UserModel,
+  user: UserModel | string,
   name: string,
   description: string,
   timestamp: string,
