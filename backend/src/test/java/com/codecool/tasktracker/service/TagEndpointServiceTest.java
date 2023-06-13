@@ -8,7 +8,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.HashSet;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -26,9 +25,9 @@ public class TagEndpointServiceTest {
     @Test
     public void getAllTagsTest() {
         List<Tag> tags = List.of(
-                new Tag("Tag 1", new HashSet<>()),
-                new Tag("Tag 2", new HashSet<>()),
-                new Tag("Tag 3", new HashSet<>())
+                new Tag(1L, "Tag 1"),
+                new Tag(2L, "Tag 2"),
+                new Tag(3L, "Tag 3")
         );
         when(tagRepository.findAll()).thenReturn(tags);
         assertEquals(tags, tagEndpointService.getAllTags());

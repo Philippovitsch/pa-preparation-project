@@ -1,7 +1,10 @@
 package com.codecool.tasktracker.service;
 
+import com.codecool.tasktracker.dto.TaskDto;
 import com.codecool.tasktracker.model.Task;
+import com.codecool.tasktracker.model.User;
 import com.codecool.tasktracker.repositories.TaskRepository;
+import com.codecool.tasktracker.repositories.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -22,15 +25,18 @@ public class TaskEndpointServiceTest {
     @Mock
     private TaskRepository taskRepository;
 
+    @Mock
+    private UserRepository userRepository;
+
     @InjectMocks
     private TaskEndpointService taskEndpointService;
 
     @Test
     public void getAllTasksTest() {
         List<Task> tasks = List.of(
-                new Task("Task 1", "Test description 1", Timestamp.valueOf("2023-04-16 02:00:00.0"), new HashSet<>()),
-                new Task("Task 2", "Test description 2", Timestamp.valueOf("2023-04-17 02:00:00.0"), new HashSet<>()),
-                new Task("Task 3", "Test description 3", Timestamp.valueOf("2023-04-18 02:00:00.0"), new HashSet<>())
+                new Task(1L, new User(), "Task 1", "Test description 2", Timestamp.valueOf("2023-04-16 02:00:00.0"), new HashSet<>()),
+                new Task(2L, new User(), "Task 2", "Test description 2", Timestamp.valueOf("2023-04-17 02:00:00.0"), new HashSet<>()),
+                new Task(3L, new User(), "Task 3", "Test description 3", Timestamp.valueOf("2023-04-18 02:00:00.0"), new HashSet<>())
         );
         when(taskRepository.findAll()).thenReturn(tasks);
         assertEquals(tasks, taskEndpointService.getAllTasks());
@@ -39,7 +45,7 @@ public class TaskEndpointServiceTest {
 
     @Test
     public void getTaskByNameTest() {
-        Task task = new Task("John's Task", "Test description", Timestamp.valueOf("2023-04-19 02:00:00.0"), new HashSet<>());
+        Task task = new Task(1L, new User(), "John's Task", "Test description", Timestamp.valueOf("2023-04-19 02:00:00.0"), new HashSet<>());
         when(taskRepository.getTaskByName(any())).thenReturn(task);
         assertEquals(task, taskEndpointService.getTaskByName(task.getName()));
         verify(taskRepository, times(1)).getTaskByName(any());
@@ -47,7 +53,7 @@ public class TaskEndpointServiceTest {
 
     @Test
     public void getTaskByNameReturnsNull() {
-        Task task = new Task("John's Task", "Test description", Timestamp.valueOf("2023-04-19 02:00:00.0"), new HashSet<>());
+        Task task = new Task(1L, new User(), "John's Task", "Test description", Timestamp.valueOf("2023-04-19 02:00:00.0"), new HashSet<>());
         when(taskRepository.getTaskByName(any())).thenReturn(null);
         assertNull(taskEndpointService.getTaskByName(task.getName()));
         verify(taskRepository, times(1)).getTaskByName(any());
@@ -55,39 +61,43 @@ public class TaskEndpointServiceTest {
 
     @Test
     public void saveTaskTest() {
-        Task task = new Task("Phil's Task", "Test description", Timestamp.valueOf("2023-04-20 02:00:00.0"), new HashSet<>());
+        TaskDto taskDto = new TaskDto("user", "Phil's Task", "Test description", Timestamp.valueOf("2023-04-20 02:00:00.0"), new HashSet<>());
+        Task task = new Task(1L, new User(), "Phil's Task", "Test description", Timestamp.valueOf("2023-04-20 02:00:00.0"), new HashSet<>());
+        when(userRepository.findUserByUsername(any())).thenReturn(new User());
         when(taskRepository.getTaskByName(any())).thenReturn(null);
         when(taskRepository.save(any())).thenReturn(task);
-        assertEquals(task, taskEndpointService.saveTask(task));
+        assertEquals(task, taskEndpointService.saveTask(taskDto));
         verify(taskRepository, times(1)).getTaskByName(any());
         verify(taskRepository, times(1)).save(any());
     }
 
     @Test
     public void saveTaskReturnsNull() {
-        Task task = new Task("Phil's Task", "Test description", Timestamp.valueOf("2023-04-20 02:00:00.0"), new HashSet<>());
+        TaskDto taskDto = new TaskDto("user", "Phil's Task", "Test description", Timestamp.valueOf("2023-04-20 02:00:00.0"), new HashSet<>());
+        Task task = new Task(1L, new User(), "Phil's Task", "Test description", Timestamp.valueOf("2023-04-20 02:00:00.0"), new HashSet<>());
+        when(userRepository.findUserByUsername(any())).thenReturn(new User());
         when(taskRepository.getTaskByName(any())).thenReturn(task);
-        assertNull(taskEndpointService.saveTask(task));
+        assertNull(taskEndpointService.saveTask(taskDto));
         verify(taskRepository, times(1)).getTaskByName(any());
         verify(taskRepository, times(0)).save(any());
     }
 
     @Test
     public void updateTaskByNameTest() {
-        Task task = new Task("El's Task", "Test description", Timestamp.valueOf("2023-04-20 02:00:00.0"), new HashSet<>());
-        Task updatedTask = new Task("El's New Task", "New test description", Timestamp.valueOf("2023-04-20 02:00:00.0"), new HashSet<>());
+        Task task = new Task(1L, new User(), "El's Task", "Test description", Timestamp.valueOf("2023-04-20 02:00:00.0"), new HashSet<>());
+        TaskDto updatedTask = new TaskDto("user", "El's New Task", "New test description", Timestamp.valueOf("2023-04-20 02:00:00.0"), new HashSet<>());
         when(taskRepository.getTaskByName(any())).thenReturn(task);
         when(taskRepository.save(any())).thenReturn(task);
-        assertEquals(updatedTask.getName(), taskEndpointService.updateTaskByName("Phil's Task", updatedTask).getName());
-        assertEquals(updatedTask.getDescription(), taskEndpointService.updateTaskByName("Phil's Task", updatedTask).getDescription());
-        assertEquals(updatedTask.getTimestamp(), taskEndpointService.updateTaskByName("Phil's Task", updatedTask).getTimestamp());
+        assertEquals(updatedTask.name(), taskEndpointService.updateTaskByName("Phil's Task", updatedTask).getName());
+        assertEquals(updatedTask.description(), taskEndpointService.updateTaskByName("Phil's Task", updatedTask).getDescription());
+        assertEquals(updatedTask.timestamp(), taskEndpointService.updateTaskByName("Phil's Task", updatedTask).getTimestamp());
         verify(taskRepository, times(3)).getTaskByName(any());
         verify(taskRepository, times(3)).save(any());
     }
 
     @Test
     public void updateTaskByNameReturnsNull() {
-        Task updatedTask = new Task("El's New Task", "New test description", Timestamp.valueOf("2023-04-20 02:00:00.0"), new HashSet<>());
+        TaskDto updatedTask = new TaskDto("user", "El's New Task", "New test description", Timestamp.valueOf("2023-04-20 02:00:00.0"), new HashSet<>());
         when(taskRepository.getTaskByName(any())).thenReturn(null);
         assertNull(taskEndpointService.updateTaskByName("Phil's Task", updatedTask));
         verify(taskRepository, times(1)).getTaskByName(any());
@@ -96,7 +106,7 @@ public class TaskEndpointServiceTest {
 
     @Test
     public void deleteTaskByNameTest() {
-        Task task = new Task("Emad's Task", "Test description", Timestamp.valueOf("2023-04-20 02:00:00.0"), new HashSet<>());
+        Task task = new Task(1L, new User(), "Emad's Task", "Test description", Timestamp.valueOf("2023-04-20 02:00:00.0"), new HashSet<>());
         when(taskRepository.getTaskByName(any())).thenReturn(task);
         doNothing().when(taskRepository).delete(any());
         assertEquals(task, taskEndpointService.deleteTaskByName(task.getName()));
@@ -106,7 +116,7 @@ public class TaskEndpointServiceTest {
 
     @Test
     public void deleteTaskByNameReturnsNull() {
-        Task task = new Task("Emad's Task", "Test description", Timestamp.valueOf("2023-04-20 02:00:00.0"), new HashSet<>());
+        Task task = new Task(1L, new User(), "Emad's Task", "Test description", Timestamp.valueOf("2023-04-20 02:00:00.0"), new HashSet<>());
         when(taskRepository.getTaskByName(any())).thenReturn(null);
         assertNull(taskEndpointService.deleteTaskByName(task.getName()));
         verify(taskRepository, times(1)).getTaskByName(any());

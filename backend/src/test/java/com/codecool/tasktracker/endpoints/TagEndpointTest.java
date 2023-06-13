@@ -9,8 +9,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
-
-import java.util.HashSet;
 import java.util.List;
 
 import static org.hamcrest.Matchers.is;
@@ -33,9 +31,9 @@ public class TagEndpointTest {
     @WithMockUser
     public void getAllTagsTest() throws Exception {
         List<Tag> tags = List.of(
-                new Tag("Tag 1", new HashSet<>()),
-                new Tag("Tag 2", new HashSet<>()),
-                new Tag("Tag 3", new HashSet<>())
+                new Tag(1L, "Tag 1"),
+                new Tag(2L, "Tag 2"),
+                new Tag(3L, "Tag 3")
         );
         when(tagEndpointService.getAllTags()).thenReturn(tags);
         mockMvc.perform(get("/api/tags/all"))

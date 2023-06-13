@@ -3,6 +3,7 @@ package com.codecool.tasktracker.service;
 import com.codecool.tasktracker.dto.TokenDto;
 import com.codecool.tasktracker.dto.UserDataDto;
 import com.codecool.tasktracker.security.JwtGenerator;
+import com.codecool.tasktracker.security.UserDetailsServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -11,7 +12,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -25,7 +25,7 @@ public class AuthEndpointServiceTest {
     private JwtGenerator jwtGenerator;
 
     @Mock
-    private InMemoryUserDetailsManager userDetailsManager;
+    private UserDetailsServiceImpl userDetailsService;
 
     @Mock
     private PasswordEncoder encoder;
@@ -53,7 +53,7 @@ public class AuthEndpointServiceTest {
     @Test
     public void signUpTestSuccess() {
         UserDataDto signUpData = new UserDataDto("user", "user");
-        when(userDetailsManager.userExists(any())).thenReturn(false);
+        when(userDetailsService.userExists(any())).thenReturn(false);
         when(encoder.encode(any())).thenReturn(new BCryptPasswordEncoder().encode(signUpData.password()));
         assertEquals(signUpData, authEndpointService.signUp(signUpData));
     }
@@ -61,7 +61,7 @@ public class AuthEndpointServiceTest {
     @Test
     public void signUpDataTestReturnsNull() {
         UserDataDto signUpData = new UserDataDto("user", "user");
-        when(userDetailsManager.userExists(any())).thenReturn(true);
+        when(userDetailsService.userExists(any())).thenReturn(true);
         assertNull(authEndpointService.signUp(signUpData));
     }
 
