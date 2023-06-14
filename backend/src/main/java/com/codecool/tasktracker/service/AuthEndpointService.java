@@ -34,7 +34,7 @@ public class AuthEndpointService {
         return new TokenDto(username, token);
     }
 
-    public UserDataDto signUp(UserDataDto userDataDto) {
+    public User signUp(UserDataDto userDataDto) {
         if (userDetailsService.userExists(userDataDto.username())) {
             return null;
         }
@@ -43,8 +43,7 @@ public class AuthEndpointService {
         user.setUsername(userDataDto.username());
         user.setPassword(encoder.encode(userDataDto.password()));
         user.setAuthorities(Set.of("USER"));
-        userDetailsService.createUser(user);
-        return userDataDto;
+        return userDetailsService.createUser(user);
     }
 
 }

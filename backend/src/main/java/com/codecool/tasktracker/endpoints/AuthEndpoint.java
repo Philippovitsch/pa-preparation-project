@@ -4,6 +4,7 @@ import com.codecool.tasktracker.dto.TokenDto;
 import com.codecool.tasktracker.dto.UserDataDto;
 import com.codecool.tasktracker.exceptions.AuthenticationException;
 import com.codecool.tasktracker.exceptions.UserAlreadyExistsError;
+import com.codecool.tasktracker.model.User;
 import com.codecool.tasktracker.service.AuthEndpointService;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,10 +30,10 @@ public class AuthEndpoint {
     }
 
     @PostMapping("/sign-up")
-    public UserDataDto signUp(@RequestBody UserDataDto loginData) {
-        UserDataDto userDataDto = authEndpointService.signUp(loginData);
-        if (userDataDto == null) throw new UserAlreadyExistsError("User already exists!");
-        return userDataDto;
+    public User signUp(@RequestBody UserDataDto loginData) {
+        User user = authEndpointService.signUp(loginData);
+        if (user == null) throw new UserAlreadyExistsError("User already exists!");
+        return user;
     }
 
 }
