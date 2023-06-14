@@ -34,7 +34,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     }
 
     public boolean userExists(String username) {
-        return userRepository.findUserByUsername(username) != null;
+        return userRepository.existsByUsername(username);
     }
 
 }
