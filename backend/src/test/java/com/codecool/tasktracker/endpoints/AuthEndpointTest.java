@@ -15,6 +15,8 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.util.Set;
+
 import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -42,7 +44,7 @@ public class AuthEndpointTest {
     @Test
     @WithMockUser
     public void userAuthenticationSuccessTest() throws Exception {
-        TokenDto tokenData = new TokenDto("user", "testToken");
+        TokenDto tokenData = new TokenDto("user", Set.of(), "testToken");
         when(authEndpointService.authenticate(any())).thenReturn(tokenData);
         MvcResult result = mockMvc.perform(post("/api/auth/authenticate").with(httpBasic("user", "password")).with(csrf()))
                 .andDo(print())

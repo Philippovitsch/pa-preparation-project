@@ -1,10 +1,12 @@
 package com.codecool.tasktracker.service;
 
 import com.codecool.tasktracker.dto.TaskDto;
+import com.codecool.tasktracker.exceptions.AuthenticationException;
 import com.codecool.tasktracker.model.Task;
 import com.codecool.tasktracker.model.User;
 import com.codecool.tasktracker.repositories.TaskRepository;
 import com.codecool.tasktracker.repositories.UserRepository;
+import com.codecool.tasktracker.security.AuthContextUtil;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -27,6 +29,9 @@ public class TaskEndpointServiceTest {
 
     @Mock
     private UserRepository userRepository;
+
+    @Mock
+    private AuthContextUtil authContextUtil;
 
     @InjectMocks
     private TaskEndpointService taskEndpointService;
@@ -107,6 +112,7 @@ public class TaskEndpointServiceTest {
     public void updateTaskByNameTest() {
         Task task = new Task(1L, new User(), "El's Task", "Test description", Timestamp.valueOf("2023-04-20 02:00:00.0"), new HashSet<>());
         TaskDto updatedTask = new TaskDto("user", "El's New Task", "New test description", Timestamp.valueOf("2023-04-20 02:00:00.0"), new HashSet<>());
+        when(authContextUtil.isTaskOwnerOrAdmin(any())).thenReturn(true);
         when(taskRepository.getTaskByName(any())).thenReturn(task);
         when(taskRepository.save(any())).thenReturn(task);
         assertEquals(updatedTask.name(), taskEndpointService.updateTaskByName("Phil's Task", updatedTask).getName());
@@ -114,6 +120,7 @@ public class TaskEndpointServiceTest {
         assertEquals(updatedTask.timestamp(), taskEndpointService.updateTaskByName("Phil's Task", updatedTask).getTimestamp());
         verify(taskRepository, times(3)).getTaskByName(any());
         verify(taskRepository, times(3)).save(any());
+        verify(authContextUtil, times(3)).isTaskOwnerOrAdmin(any());
     }
 
     @Test
@@ -123,16 +130,33 @@ public class TaskEndpointServiceTest {
         assertNull(taskEndpointService.updateTaskByName("Phil's Task", updatedTask));
         verify(taskRepository, times(1)).getTaskByName(any());
         verify(taskRepository, times(0)).save(any());
+        verify(authContextUtil, times(0)).isTaskOwnerOrAdmin(any());
     }
+
+    @Test
+    public void updateTaskByNameThrowsError() {
+        Task task = new Task(1L, new User(), "El's Task", "Test description", Timestamp.valueOf("2023-04-20 02:00:00.0"), new HashSet<>());
+        TaskDto updatedTask = new TaskDto("user", "El's New Task", "New test description", Timestamp.valueOf("2023-04-20 02:00:00.0"), new HashSet<>());
+        when(taskRepository.getTaskByName(any())).thenReturn(task);
+        when(authContextUtil.isTaskOwnerOrAdmin(any())).thenReturn(false);
+        assertThrows(AuthenticationException.class, () -> taskEndpointService.updateTaskByName("Phil's Task", updatedTask));
+        verify(taskRepository, times(1)).getTaskByName(any());
+        verify(taskRepository, times(0)).save(any());
+        verify(authContextUtil, times(1)).isTaskOwnerOrAdmin(any());
+    }
+
 
     @Test
     public void deleteTaskByNameTest() {
         Task task = new Task(1L, new User(), "Emad's Task", "Test description", Timestamp.valueOf("2023-04-20 02:00:00.0"), new HashSet<>());
+        when(authContextUtil.isTaskOwnerOrAdmin(any())).thenReturn(true);
         when(taskRepository.getTaskByName(any())).thenReturn(task);
         doNothing().when(taskRepository).delete(any());
         assertEquals(task, taskEndpointService.deleteTaskByName(task.getName()));
         verify(taskRepository, times(1)).getTaskByName(any());
         verify(taskRepository, times(1)).delete(any());
+        verify(authContextUtil, times(1)).isTaskOwnerOrAdmin(any());
+
     }
 
     @Test
@@ -142,6 +166,19 @@ public class TaskEndpointServiceTest {
         assertNull(taskEndpointService.deleteTaskByName(task.getName()));
         verify(taskRepository, times(1)).getTaskByName(any());
         verify(taskRepository, times(0)).delete(any());
+        verify(authContextUtil, times(0)).isTaskOwnerOrAdmin(any());
+
+    }
+
+    @Test
+    public void deleteTaskByNameThrowsError() {
+        Task task = new Task(1L, new User(), "Emad's Task", "Test description", Timestamp.valueOf("2023-04-20 02:00:00.0"), new HashSet<>());
+        when(taskRepository.getTaskByName(any())).thenReturn(task);
+        when(authContextUtil.isTaskOwnerOrAdmin(any())).thenReturn(false);
+        assertThrows(AuthenticationException.class, () -> taskEndpointService.deleteTaskByName(task.getName()));
+        verify(taskRepository, times(1)).getTaskByName(any());
+        verify(taskRepository, times(0)).delete(any());
+        verify(authContextUtil, times(1)).isTaskOwnerOrAdmin(any());
     }
 
 }
