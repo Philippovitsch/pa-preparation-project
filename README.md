@@ -24,13 +24,18 @@ The project is divided into milestones to let the project grow iteratively. Afte
 - JavaScript (eg. arrow functions, spread operator, fetch/ axios)
 - React (several components, use of several hooks and custom hooks)
 
+After the implementation of Milestone 5, I decided to continue working on the project to deepen my knowledge of the mentioned tech stack even further and to practice the following new topics:
+
+- TypeScript
+- Semantic UI
+
 ## Milestones
 
 - Milestone 1: Spring Boot with Spring Web & JavaScript with React
 - Milestone 2: Milestone 1 & Spring Data JPA and H2
 - Milestone 3: Milestone 2 & Spring Security
 - Milestone 4: Milestone 3 & OAuth2 Resource Server
-- Milestone 5: milestone 4 & increased complexity
+- Milestone 5: Milestone 4 & Increased complexity
 
 ## Run locally
 
@@ -59,8 +64,13 @@ There are two default users provided for the login:
 
 ## Screenshots
 
-Index page with a logged in user:
-![image](https://user-images.githubusercontent.com/16825493/234654865-5c9e8546-3ecf-4778-8a18-58e1fd5d6831.png)
+Sign up page:
+![image](https://raw.githubusercontent.com/Philippovitsch/pa-preparation-project/main/screenshots/sign-up.jpg)
+
+Landing page with a logged in user:
+![image](https://raw.githubusercontent.com/Philippovitsch/pa-preparation-project/main/screenshots/landing_2.jpg)
 
 Form to save a new task:
-![image](https://user-images.githubusercontent.com/16825493/234655088-362511f5-cd16-45cf-be3d-22cbf998b0a2.png)
+![image](https://raw.githubusercontent.com/Philippovitsch/pa-preparation-project/main/screenshots/new-task.jpg)
+
+More screenshots are available in the `screenshots` folder...
