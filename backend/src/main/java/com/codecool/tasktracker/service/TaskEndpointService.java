@@ -6,8 +6,7 @@ import com.codecool.tasktracker.model.Task;
 import com.codecool.tasktracker.model.User;
 import com.codecool.tasktracker.repositories.TaskRepository;
 import com.codecool.tasktracker.repositories.UserRepository;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import com.codecool.tasktracker.security.AuthContextUtil;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -18,10 +17,12 @@ public class TaskEndpointService {
 
     private final TaskRepository taskRepository;
     private final UserRepository userRepository;
+    private final AuthContextUtil authContextUtil;
 
-    public TaskEndpointService(TaskRepository taskRepository, UserRepository userRepository) {
+    public TaskEndpointService(TaskRepository taskRepository, UserRepository userRepository, AuthContextUtil authContextUtil) {
         this.taskRepository = taskRepository;
         this.userRepository = userRepository;
+        this.authContextUtil = authContextUtil;
     }
 
     public List<Task> getAllTasks() {
@@ -58,7 +59,11 @@ public class TaskEndpointService {
     public Task updateTaskByName(String name, TaskDto updatedTask) {
         Task task = taskRepository.getTaskByName(name);
 
-        if (task != null && isTaskOwnerOrAdmin(task)) {
+        if (task == null) {
+            return null;
+        }
+
+        if (authContextUtil.isTaskOwnerOrAdmin(task)) {
             task.setName(updatedTask.name());
             task.setDescription(updatedTask.description());
             task.setTags(updatedTask.tags());
@@ -72,20 +77,16 @@ public class TaskEndpointService {
     public Task deleteTaskByName(String name) {
         Task task = taskRepository.getTaskByName(name);
 
-        if (task != null && isTaskOwnerOrAdmin(task)) {
+        if (task == null) {
+            return null;
+        }
+
+        if (authContextUtil.isTaskOwnerOrAdmin(task)) {
             taskRepository.delete(task);
             return task;
         }
 
         throw new AuthenticationException("You are not allowed to delete this task");
-    }
-
-    private boolean isTaskOwnerOrAdmin(Task task) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        boolean isTaskOwner = authentication.getName().equals(task.getUser().getUsername());
-        boolean isAdmin = authentication.getAuthorities().stream()
-                .anyMatch(authority -> authority.getAuthority().equals("ROLE_ADMIN"));
-        return isTaskOwner || isAdmin;
     }
 
 }
