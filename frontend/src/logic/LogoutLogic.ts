@@ -6,6 +6,7 @@ const useLogout = (setUser: (user: string | null) => void) => {
   const performLogout = () => {
     localStorage.removeItem("bearerToken");
     localStorage.removeItem("user");
+    localStorage.removeItem("isAdmin");
     setUser(null);
     setTimeout(() => navigate("/"), 1500);
   };

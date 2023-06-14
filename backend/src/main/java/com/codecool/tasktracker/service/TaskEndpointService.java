@@ -1,10 +1,13 @@
 package com.codecool.tasktracker.service;
 
 import com.codecool.tasktracker.dto.TaskDto;
+import com.codecool.tasktracker.exceptions.AuthenticationException;
 import com.codecool.tasktracker.model.Task;
 import com.codecool.tasktracker.model.User;
 import com.codecool.tasktracker.repositories.TaskRepository;
 import com.codecool.tasktracker.repositories.UserRepository;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -54,19 +57,35 @@ public class TaskEndpointService {
 
     public Task updateTaskByName(String name, TaskDto updatedTask) {
         Task task = taskRepository.getTaskByName(name);
-        if (task != null) {
+
+        if (task != null && isTaskOwnerOrAdmin(task)) {
             task.setName(updatedTask.name());
             task.setDescription(updatedTask.description());
             task.setTags(updatedTask.tags());
             taskRepository.save(task);
+            return task;
         }
-        return task;
+
+        throw new AuthenticationException("You are not allowed to edit this task");
     }
 
     public Task deleteTaskByName(String name) {
         Task task = taskRepository.getTaskByName(name);
-        if (task != null) taskRepository.delete(task);
-        return task;
+
+        if (task != null && isTaskOwnerOrAdmin(task)) {
+            taskRepository.delete(task);
+            return task;
+        }
+
+        throw new AuthenticationException("You are not allowed to delete this task");
+    }
+
+    private boolean isTaskOwnerOrAdmin(Task task) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        boolean isTaskOwner = authentication.getName().equals(task.getUser().getUsername());
+        boolean isAdmin = authentication.getAuthorities().stream()
+                .anyMatch(authority -> authority.getAuthority().equals("ROLE_ADMIN"));
+        return isTaskOwner || isAdmin;
     }
 
 }

@@ -6,10 +6,12 @@ import com.codecool.tasktracker.model.User;
 import com.codecool.tasktracker.security.JwtGenerator;
 import com.codecool.tasktracker.security.UserDetailsServiceImpl;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class AuthEndpointService {
@@ -30,8 +32,9 @@ public class AuthEndpointService {
         }
 
         String username = authentication.getName();
+        Set<String> roles = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toSet());
         String token = jwtGenerator.generate(authentication);
-        return new TokenDto(username, token);
+        return new TokenDto(username, roles, token);
     }
 
     public User signUp(UserDataDto userDataDto) {

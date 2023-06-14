@@ -6,7 +6,7 @@ export default function Task(props:
     task: TaskModel,
     deleteTask: (task: TaskModel) => Promise<void>
   }
-) { 
+) {
   return (
     <Message>
       <Message.Header>{ props.task.name }</Message.Header>
@@ -15,14 +15,16 @@ export default function Task(props:
         <p><b>Tags</b>: { props.task.tags.map(task => task.name).join(", ") }</p>
       }
       <i>Saved on { new Date(props.task.timestamp).toDateString() } by <b>{ props.task.user.username }</b></i>
-      <img
-        className="delete-icon"
-        src="/delete.png"
-        alt="delete.png"
-        height="18px"
-        title="Delete task"
-        onClick={ () => props.deleteTask(props.task) } 
-      />
+      { (props.task.user.username === localStorage.getItem("user") || localStorage.getItem("isAdmin") === "true") &&
+        <img
+          className="delete-icon"
+          src="/delete.png"
+          alt="delete.png"
+          height="18px"
+          title="Delete task"
+          onClick={ () => props.deleteTask(props.task) }
+        />
+      }
     </Message>
   );
 }

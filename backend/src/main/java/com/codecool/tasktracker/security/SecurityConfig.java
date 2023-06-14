@@ -9,7 +9,6 @@ import com.nimbusds.jose.proc.SecurityContext;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -44,10 +43,8 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .headers().frameOptions().sameOrigin().and()
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(HttpMethod.GET,"/api/tags/**").hasRole("USER")
-                        .requestMatchers(HttpMethod.GET,"/api/tasks/**").hasRole("USER")
-                        .requestMatchers(HttpMethod.POST, "/api/tasks/**").hasRole("USER")
-                        .requestMatchers("/api/tasks/**").hasRole("ADMIN")
+                        .requestMatchers("/api/tags/**").hasRole("USER")
+                        .requestMatchers("/api/tasks/**").hasRole("USER")
                         .requestMatchers("/api/user/**").hasRole("USER")
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers(toH2Console()).permitAll()

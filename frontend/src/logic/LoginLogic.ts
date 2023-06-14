@@ -24,6 +24,7 @@ const useLogin = () => {
     if (response.status === 200) {
       localStorage.setItem("bearerToken", response.data.token);
       localStorage.setItem("user", username);
+      localStorage.setItem("isAdmin", response.data.roles.includes("ADMIN"));
       setUser(username);
       setUserMessage({level: "success", text: "Login successful!"});
       setTimeout(() => navigate("/"), 1500);

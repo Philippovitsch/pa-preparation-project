@@ -1,4 +1,6 @@
 package com.codecool.tasktracker.dto;
 
-public record TokenDto(String username, String token) {
+import java.util.Set;
+
+public record TokenDto(String username, Set<String> roles, String token) {
 }
