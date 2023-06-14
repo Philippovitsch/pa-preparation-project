@@ -2,6 +2,7 @@ package com.codecool.tasktracker.service;
 
 import com.codecool.tasktracker.dto.TokenDto;
 import com.codecool.tasktracker.dto.UserDataDto;
+import com.codecool.tasktracker.model.User;
 import com.codecool.tasktracker.security.JwtGenerator;
 import com.codecool.tasktracker.security.UserDetailsServiceImpl;
 import org.junit.jupiter.api.Test;
@@ -53,9 +54,14 @@ public class AuthEndpointServiceTest {
     @Test
     public void signUpTestSuccess() {
         UserDataDto signUpData = new UserDataDto("user", "user");
+        User user = new User();
+        user.setUsername("user");
+        user.setPassword("password");
+
         when(userDetailsService.userExists(any())).thenReturn(false);
+        when(userDetailsService.createUser(any())).thenReturn(user);
         when(encoder.encode(any())).thenReturn(new BCryptPasswordEncoder().encode(signUpData.password()));
-        assertEquals(signUpData, authEndpointService.signUp(signUpData));
+        assertEquals(user, authEndpointService.signUp(signUpData));
     }
 
     @Test

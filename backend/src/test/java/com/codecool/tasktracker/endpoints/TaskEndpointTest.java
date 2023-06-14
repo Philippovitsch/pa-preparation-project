@@ -60,6 +60,24 @@ public class TaskEndpointTest {
 
     @Test
     @WithMockUser
+    public void getTasksByUsernameTest() throws Exception {
+        List<Task> tasks = List.of(
+                new Task(1L, new User(), "Task 1", "Test description 2", Timestamp.valueOf("2023-04-16 02:00:00.0"), new HashSet<>()),
+                new Task(2L, new User(), "Task 2", "Test description 2", Timestamp.valueOf("2023-04-17 02:00:00.0"), new HashSet<>()),
+                new Task(3L, new User(), "Task 3", "Test description 3", Timestamp.valueOf("2023-04-18 02:00:00.0"), new HashSet<>())
+        );
+        when(taskEndpointService.getTasksByUsername(any())).thenReturn(tasks);
+        mockMvc.perform(get("/api/tasks/user/username"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.*").isArray())
+                .andExpect(jsonPath("$[0].name", is(tasks.get(0).getName())))
+                .andExpect(jsonPath("$[1].name", is(tasks.get(1).getName())))
+                .andExpect(jsonPath("$[2].name", is(tasks.get(2).getName())));
+    }
+
+    @Test
+    @WithMockUser
     public void getTaskByNameTest() throws Exception {
         Task task = new Task(1L, new User(), "John's Task", "Test description", Timestamp.valueOf("2023-04-19 02:00:00.0"), new HashSet<>());
         when(taskEndpointService.getTaskByName(any())).thenReturn(task);

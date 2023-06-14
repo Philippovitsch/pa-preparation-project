@@ -8,8 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
-import java.sql.Timestamp;
-import java.util.HashSet;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -46,6 +45,24 @@ public class TaskRepositoryTest {
 
         assertEquals(task1, taskRepository.getTaskByName(task1.getName()));
         assertEquals(task2, taskRepository.getTaskByName(task2.getName()));
+    }
+
+    @Test
+    public void getTaskByUserIdTest() {
+        User user = new User();
+        user.setId(1);
+
+        Task task1 = new Task();
+        task1.setUser(user);
+
+        Task task2 = new Task();
+        task2.setUser(user);
+
+        entityManager.persist(task1);
+        entityManager.persist(task2);
+
+        assertEquals(Arrays.asList(task1, task2), taskRepository.getTaskByUserId(1));
+        assertEquals(0, taskRepository.getTaskByUserId(2).size());
     }
 
 }

@@ -44,6 +44,27 @@ public class TaskEndpointServiceTest {
     }
 
     @Test
+    public void getTaskByUsernameTest() {
+        User user = new User();
+        user.setId(1);
+        user.setUsername("testuser");
+        List<Task> tasks = List.of(
+                new Task(1L, new User(), "Task 1", "Test description 2", Timestamp.valueOf("2023-04-16 02:00:00.0"), new HashSet<>()),
+                new Task(2L, new User(), "Task 2", "Test description 2", Timestamp.valueOf("2023-04-17 02:00:00.0"), new HashSet<>()),
+                new Task(3L, new User(), "Task 3", "Test description 3", Timestamp.valueOf("2023-04-18 02:00:00.0"), new HashSet<>())
+        );
+        when(userRepository.findUserByUsername(any())).thenReturn(user);
+        when(taskRepository.getTaskByUserId(anyLong())).thenReturn(tasks);
+        assertEquals(tasks, taskEndpointService.getTasksByUsername("testuser"));
+    }
+
+    @Test
+    public void getTaskByUsernameReturnsEmptyList() {
+        when(userRepository.findUserByUsername(any())).thenReturn(null);
+        assertEquals(0, taskEndpointService.getTasksByUsername("testuser").size());
+    }
+
+    @Test
     public void getTaskByNameTest() {
         Task task = new Task(1L, new User(), "John's Task", "Test description", Timestamp.valueOf("2023-04-19 02:00:00.0"), new HashSet<>());
         when(taskRepository.getTaskByName(any())).thenReturn(task);

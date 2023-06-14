@@ -2,6 +2,7 @@ package com.codecool.tasktracker.endpoints;
 
 import com.codecool.tasktracker.dto.TokenDto;
 import com.codecool.tasktracker.dto.UserDataDto;
+import com.codecool.tasktracker.model.User;
 import com.codecool.tasktracker.service.AuthEndpointService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -30,13 +31,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class AuthEndpointTest {
 
     @Autowired
-    MockMvc mockMvc;
+    private MockMvc mockMvc;
 
     @Autowired
-    ObjectMapper objectMapper;
+    private ObjectMapper objectMapper;
 
     @MockBean
-    AuthEndpointService authEndpointService;
+    private AuthEndpointService authEndpointService;
 
     @Test
     @WithMockUser
@@ -82,15 +83,19 @@ public class AuthEndpointTest {
     @WithMockUser
     public void signUpSuccessTest() throws Exception {
         UserDataDto signUpData = new UserDataDto("user", "password");
-        when(authEndpointService.signUp(any())).thenReturn(signUpData);
+        User user = new User();
+        user.setId(0);
+        user.setUsername("user");
+
+        when(authEndpointService.signUp(any())).thenReturn(user);
         mockMvc.perform(post("/api/auth/sign-up").with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(signUpData))
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.username", is(signUpData.username())))
-                .andExpect(jsonPath("$.password", is(signUpData.password())));
+                .andExpect(jsonPath("$.id", is((int) user.getId())))
+                .andExpect(jsonPath("$.username", is(user.getUsername())));
     }
 
     @Test
