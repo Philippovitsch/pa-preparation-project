@@ -1,6 +1,7 @@
 package com.codecool.tasktracker.endpoints;
 
 import com.codecool.tasktracker.dto.UserDetailsDto;
+import com.codecool.tasktracker.exceptions.UserNotFoundException;
 import com.codecool.tasktracker.service.UserEndpointService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,7 +20,9 @@ public class UserEndpoint {
 
     @GetMapping("/{username}")
     public UserDetailsDto getUserData(@PathVariable String username) {
-        return userEndpointService.getUserData(username);
+        UserDetailsDto userData = userEndpointService.getUserData(username);
+        if (userData == null) throw new UserNotFoundException("User not found!");
+        return userData;
     }
 
 }

@@ -1,6 +1,8 @@
 package com.codecool.tasktracker.service;
 
 import com.codecool.tasktracker.dto.UserDetailsDto;
+import com.codecool.tasktracker.model.User;
+import com.codecool.tasktracker.security.UserDetailsImpl;
 import com.codecool.tasktracker.security.UserDetailsServiceImpl;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,17 +21,24 @@ public class UserEndpointService {
     }
 
     public UserDetailsDto getUserData(String username) {
-        UserDetails user =  userDetailsService.loadUserByUsername(username);
-        List<String> authorities = user.getAuthorities().stream()
+        User user =  userDetailsService.getUserByUsername(username);
+
+        if (user == null) {
+            return null;
+        }
+
+        UserDetails userDetails = new UserDetailsImpl(user);
+        List<String> authorities = userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
+
         return new UserDetailsDto(
-                user.getUsername(),
+                userDetails.getUsername(),
                 authorities,
-                user.isAccountNonExpired(),
-                user.isAccountNonLocked(),
-                user.isCredentialsNonExpired(),
-                user.isEnabled()
+                userDetails.isAccountNonExpired(),
+                userDetails.isAccountNonLocked(),
+                userDetails.isCredentialsNonExpired(),
+                userDetails.isEnabled()
         );
     }
 }

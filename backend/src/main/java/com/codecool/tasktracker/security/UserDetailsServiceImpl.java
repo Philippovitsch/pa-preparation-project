@@ -25,6 +25,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return new UserDetailsImpl(user);
     }
 
+    public User getUserByUsername(String username) {
+        return userRepository.findUserByUsername(username);
+    }
+
     public User createUser(User user) {
         return userRepository.save(user);
     }
