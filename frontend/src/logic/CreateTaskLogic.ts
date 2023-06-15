@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { getAllTags, saveNewTask } from "../functions/fetch";
 import { useNavigate } from "react-router-dom";
 import { TagModel } from "../model/TagModel";
-import { TaskModel } from "../model/TaskModel";
+import { TaskRequestModel } from "../model/TaskRequestModel.ts";
 import { UserMessage } from "../model/UserMessage";
 
 const useCreateTask = () => {
@@ -42,7 +42,7 @@ const useCreateTask = () => {
       }
       tags.push(newTag)
     })
-    const newTask: TaskModel = {
+    const newTask: TaskRequestModel = {
       user: <string> localStorage.getItem("user"),
       name: name,
       description: description,

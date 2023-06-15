@@ -1,9 +1,9 @@
 import { TagModel } from "./TagModel"
 import {UserModel} from "./UserModel.ts";
 
-export type TaskModel = {
+export type TaskResponseModel = {
   id?: number,
-  user: UserModel | string,
+  user: UserModel,
   name: string,
   description: string,
   timestamp: string,

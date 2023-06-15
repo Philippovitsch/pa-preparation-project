@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import {deleteTaskByName, getAllTasks, getTasksByUsername} from "../functions/fetch";
-import { TaskModel } from "../model/TaskModel";
+import { TaskResponseModel } from "../model/TaskResponseModel.ts";
 
 const useTasks = () => {
-  const [tasks, setTasks] = useState<TaskModel[]>([]);
+  const [tasks, setTasks] = useState<TaskResponseModel[]>([]);
 
   useEffect(() => {
     getTasks();
@@ -31,7 +31,7 @@ const useTasks = () => {
     }
   };
 
-  const deleteTask = async (task: TaskModel) => {
+  const deleteTask = async (task: TaskResponseModel) => {
     const name = task.name;
     const response = await deleteTaskByName(name);
     if (response.status === 200) {

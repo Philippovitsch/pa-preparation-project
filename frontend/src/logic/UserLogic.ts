@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { getTasksByUsername, getUserData } from "../functions/fetch";
 import { UserDetailsModel } from "../model/UserDetailsModel";
-import { TaskModel } from "../model/TaskModel";
+import { TaskResponseModel } from "../model/TaskResponseModel.ts";
 
 const useUser = () => {
   const [userDetails, setUserDetails] = useState<UserDetailsModel>();
-  const [tasks, setTasks] = useState<TaskModel[]>([]);
+  const [tasks, setTasks] = useState<TaskResponseModel[]>([]);
 
   useEffect(() => {
     getUser();

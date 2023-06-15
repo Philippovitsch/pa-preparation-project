@@ -1,10 +1,10 @@
 import { Message } from "semantic-ui-react"
-import { TaskModel } from "../model/TaskModel";
+import { TaskResponseModel } from "../model/TaskResponseModel.ts";
 
 export default function Task(props:
   {
-    task: TaskModel,
-    deleteTask: (task: TaskModel) => Promise<void>
+    task: TaskResponseModel,
+    deleteTask: (task: TaskResponseModel) => Promise<void>
   }
 ) {
   return (
