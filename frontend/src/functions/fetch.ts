@@ -1,5 +1,4 @@
 import axios from "axios";
-import { TaskRequestModel } from "../model/TaskRequestModel.ts";
 import { UserDataModel } from "../model/UserDataModel";
 import { ConfigModel } from "../model/ConfigModel";
 
@@ -58,7 +57,7 @@ export function getTasksByUsername() {
   return fetchData(axiosConfig, token);
 }
 
-export function saveNewTask(task: TaskRequestModel) {
+export function saveNewTask(task: FormData) {
   const token = "Bearer " + localStorage.getItem("bearerToken");
   const axiosConfig = getAxiosConfig("/api/tasks", "POST", token, task);
   return fetchData(axiosConfig, token);

@@ -3,7 +3,14 @@ import useCreateTask from "../logic/CreateTaskLogic";
 import { Link } from "react-router-dom";
 
 export default function CreateTask() {
-  const [{setName, setDescription, saveTask, tags, userMessage}] = useCreateTask();
+  const [{
+    setName,
+    setDescription,
+    handleImageUpload,
+    saveTask,
+    tags,
+    userMessage
+  }] = useCreateTask();
 
   return (
     <Container text style={{ paddingTop: "100px", paddingBottom: "100px" }}>
@@ -19,19 +26,26 @@ export default function CreateTask() {
           <Form>
             <Form.Field>
               <label>Task name:</label>
-              <input placeholder="Task name" type="text" id="task-name" onChange={ (event) => setName(event.target.value) } />
+              <input placeholder="Task name" type="text" id="task-name" onChange={ (event) => setName(event.target.value.trim()) } />
             </Form.Field>
             <Form.Field>
               <label>Task description</label>
-              <input placeholder="Task description" type="text" onChange={ (event) => setDescription(event.target.value) } />
+              <input placeholder="Task description" type="text" onChange={ (event) => setDescription(event.target.value.trim()) } />
             </Form.Field>
-            <Segment style={{ marginTop: "30px" }}>
-              {
-                tags.map(tag => (
-                  <Checkbox key={tag.id} style={{ marginRight: "25px" }} data-id={ tag.id } data-name={ tag.name } label={ tag.name } />
-                ))
-              }
-            </Segment>
+            <Form.Field style={{ marginTop: "16px", marginBottom: "18px" }}>
+              <label>Tags</label>
+              <Segment style={{ marginTop: "0" }}>
+                {
+                  tags.map(tag => (
+                    <Checkbox key={tag.id} style={{ marginRight: "25px" }} data-id={ tag.id } data-name={ tag.name } label={ tag.name } />
+                  ))
+                }
+              </Segment>
+            </Form.Field>
+            <Form.Field>
+              <label>Image upload</label>
+              <input type="file" onChange={ (event) => handleImageUpload(event.target.files) } />
+            </Form.Field>
             <Button type="submit" style={{ marginTop: "15px" }} value="Save task" onClick={ saveTask }>Add task</Button>
           </Form>
         </>

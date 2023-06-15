@@ -7,5 +7,8 @@ export type TaskResponseModel = {
   name: string,
   description: string,
   timestamp: string,
-  tags: TagModel[]
+  tags: TagModel[],
+  imageName: string,
+  imageType: string,
+  imageData: string,
 }

@@ -1,8 +1,9 @@
 package com.codecool.tasktracker.dto;
 
-import com.codecool.tasktracker.model.Tag;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.Timestamp;
+import java.util.Optional;
 import java.util.Set;
 
 public record TaskDto(
@@ -10,5 +11,6 @@ public record TaskDto(
         String name,
         String description,
         Timestamp timestamp,
-        Set<Tag> tags
+        Set<String> tags,
+        Optional<MultipartFile> image
 ) {}

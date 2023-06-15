@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { getAllTags, saveNewTask } from "../functions/fetch";
 import { useNavigate } from "react-router-dom";
 import { TagModel } from "../model/TagModel";
-import { TaskRequestModel } from "../model/TaskRequestModel.ts";
 import { UserMessage } from "../model/UserMessage";
 
 const useCreateTask = () => {
@@ -10,6 +9,7 @@ const useCreateTask = () => {
   const [description, setDescription] = useState("");
   const [userMessage, setUserMessage] = useState<UserMessage>();
   const [tags, setTags] = useState<TagModel[]>([]);
+  const [image, setImage] = useState<File>();
   
   useEffect(() => {
     const fetchTags = async () => {
@@ -22,6 +22,19 @@ const useCreateTask = () => {
     fetchTags();
   }, [])
 
+  const handleImageUpload = (files: FileList | null) => {
+    if (files !== null && files[0].type.includes("image/")) {
+      setUserMessage(undefined);
+      setImage(files[0]);
+    } else {
+      const userMessage: UserMessage = {
+        level: "error",
+        text: "You can't upload this file format!"
+      }
+      setUserMessage(userMessage);
+    }
+  };
+
   const navigate = useNavigate();
 
   const saveTask = async () => {
@@ -32,23 +45,19 @@ const useCreateTask = () => {
 
     const checkedTags = document.querySelectorAll(".checked");
     
-    const tags: TagModel[] = [];
-    checkedTags.forEach(tag => {
-      const id = tag.getAttribute("data-id");
-      const name = tag.getAttribute("data-name");
-      const newTag: TagModel = {
-        id: (id !== null) ? parseInt(id) : -1,
-        name:  (name !== null) ? name : ""
-      }
-      tags.push(newTag)
-    })
-    const newTask: TaskRequestModel = {
-      user: <string> localStorage.getItem("user"),
-      name: name,
-      description: description,
-      timestamp: new Date().toISOString(),
-      tags: tags
-    };
+    const tags: String[] = [];
+    checkedTags.forEach(tag => tags.push(<string> tag.getAttribute("data-name")));
+
+    const newTask = new FormData();
+    newTask.append("user",  <string> localStorage.getItem("user"));
+    newTask.append("name", name);
+    newTask.append("description", description);
+    // @ts-ignore
+    newTask.append("timestamp", new Date().getTime());
+    // @ts-ignore
+    newTask.append("tags", tags);
+    // @ts-ignore
+    newTask.append("image", image);
 
     const response = await saveNewTask(newTask);
     
@@ -60,7 +69,7 @@ const useCreateTask = () => {
     }
   };
 
-  return [{setName, setDescription, saveTask, tags, userMessage}];
+  return [{setName, setDescription, handleImageUpload, saveTask, tags, userMessage}];
 };
 
 export default useCreateTask;

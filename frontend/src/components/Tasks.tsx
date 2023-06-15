@@ -1,6 +1,6 @@
 import { Container, Header } from "semantic-ui-react";
 import Task from "./Task";
-import useTasks from "../logic/TaskLogic";
+import useTasks from "../logic/TasksLogics.ts";
 import { Link } from "react-router-dom";
 
 export default function Tasks() {

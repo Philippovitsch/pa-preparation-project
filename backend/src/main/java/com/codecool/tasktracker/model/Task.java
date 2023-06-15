@@ -2,6 +2,7 @@ package com.codecool.tasktracker.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,6 +11,7 @@ import java.util.Set;
 
 @Entity
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Task {
@@ -28,6 +30,10 @@ public class Task {
     private String name;
     private String description;
     private Timestamp timestamp;
+    private String imageName;
+    private String imageType;
+    @Lob
+    private byte[] imageData;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
