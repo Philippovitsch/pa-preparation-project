@@ -23,15 +23,26 @@ const useCreateTask = () => {
   }, [])
 
   const handleImageUpload = (files: FileList | null) => {
-    if (files !== null && files[0].type.includes("image/")) {
-      setUserMessage(undefined);
-      setImage(files[0]);
-    } else {
+    if (files === null || files.length === 0) {
       const userMessage: UserMessage = {
         level: "error",
         text: "You can't upload this file format!"
       }
       setUserMessage(userMessage);
+      setImage(undefined);
+    } else if (files[0].type.includes("image/")) {
+      setUserMessage(undefined);
+      setImagePreview(files[0]);
+      setImage(files[0]);
+    }
+  };
+
+  const setImagePreview = (image: File) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(image);
+    reader.onload = function() {
+      const imageElement = <HTMLImageElement> document.querySelector("#image-preview");
+      imageElement.src = (image !== null) ? <string> reader.result : imageElement.src = "";
     }
   };
 
@@ -69,7 +80,7 @@ const useCreateTask = () => {
     }
   };
 
-  return [{setName, setDescription, handleImageUpload, saveTask, tags, userMessage}];
+  return [{setName, setDescription, image, handleImageUpload, saveTask, tags, userMessage}];
 };
 
 export default useCreateTask;

@@ -6,6 +6,7 @@ export default function CreateTask() {
   const [{
     setName,
     setDescription,
+    image,
     handleImageUpload,
     saveTask,
     tags,
@@ -45,6 +46,12 @@ export default function CreateTask() {
             <Form.Field>
               <label>Image upload</label>
               <input type="file" onChange={ (event) => handleImageUpload(event.target.files) } />
+              { image &&
+                <img id="image-preview"
+                  style={{ width: "100px", marginTop: "10px" }}
+                  alt="Preview"
+                />
+              }
             </Form.Field>
             <Button type="submit" style={{ marginTop: "15px" }} value="Save task" onClick={ saveTask }>Add task</Button>
           </Form>
