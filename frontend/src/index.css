@@ -5,7 +5,8 @@
     align-items: center;
 }
 
-.delete-icon {
+.icon {
+    margin-left: 10px;
     float: right;
     cursor: pointer;
 }

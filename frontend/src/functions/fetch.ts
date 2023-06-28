@@ -63,6 +63,12 @@ export function saveNewTask(task: FormData) {
   return fetchData(axiosConfig, token);
 }
 
+export function updateTask(task: FormData, taskName: string) {
+  const token = "Bearer " + localStorage.getItem("bearerToken");
+  const axiosConfig = getAxiosConfig(`/api/tasks/${taskName}`, "PUT", token, task);
+  return fetchData(axiosConfig, token);
+}
+
 export function deleteTaskByName(name: string) {
   const token = "Bearer " + localStorage.getItem("bearerToken");
   const axiosConfig = getAxiosConfig(`/api/tasks/${name}`, "DELETE", token, {});

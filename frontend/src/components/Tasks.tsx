@@ -4,7 +4,7 @@ import useTasks from "../logic/TasksLogics.ts";
 import { Link } from "react-router-dom";
 
 export default function Tasks() {
-  const [{ tasks, triggerUserTasks, deleteTask }] = useTasks();
+  const [{ tasks, triggerUserTasks, getTasks, deleteTask }] = useTasks();
 
   return (
     <Container text style={{ paddingTop: "100px", paddingBottom: "100px" }}>
@@ -14,7 +14,7 @@ export default function Tasks() {
         : <>
           <span className="task-option" onClick={() => triggerUserTasks(false)}>All Tasks</span>
           <span className="task-option" onClick={() => triggerUserTasks(true)}>Your tasks</span>
-          { tasks.map(task => <Task key={ task.id } task={ task } deleteTask={ deleteTask } />) }
+          { tasks.map(task => <Task key={ task.id } task={ task } getTasks={getTasks} deleteTask={ deleteTask } />) }
         </>
       }
     </Container>

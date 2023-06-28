@@ -40,7 +40,7 @@ const useTasks = () => {
     }
   };
 
-  return [{ tasks, triggerUserTasks, deleteTask }];
+  return [{ tasks, triggerUserTasks, getTasks, deleteTask }];
 };
 
 export default useTasks;
