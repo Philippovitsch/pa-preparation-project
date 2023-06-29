@@ -11,6 +11,7 @@ const useTaskForm = () => {
   const [userMessage, setUserMessage] = useState<UserMessage>();
   const [tags, setTags] = useState<TagModel[]>([]);
   const [image, setImage] = useState<File>();
+  const [imagePreview, setImagePreview] = useState("");
   const [originalTaskName, setOriginalTaskName] = useState("");
 
   const fetchTags = async () => {
@@ -32,36 +33,47 @@ const useTaskForm = () => {
       taskDescription.value = task.description;
       setDescription(task.description);
 
-      const res: Response = await fetch("data:" + task.imageType + ";base64, " + task.imageData);
-      const blob: Blob = await res.blob();
-      const file: File = new File([blob], task.imageName, {type: task.imageType});
-      const dataTransfer: DataTransfer = new DataTransfer()
-      dataTransfer.items.add(file)
-      handleImageUpload(dataTransfer.files)
+      if (task.imageName !== null) {
+        const res: Response = await fetch("data:" + task.imageType + ";base64, " + task.imageData);
+        const blob: Blob = await res.blob();
+        const file: File = new File([blob], task.imageName, {type: task.imageType});
+        const dataTransfer: DataTransfer = new DataTransfer()
+        dataTransfer.items.add(file)
+        handleImageUpload(dataTransfer.files)
+      }
     }
   }
 
   const handleImageUpload = (files: FileList | null) => {
-    if (files === null || files.length === 0) {
+    if (files === null) {
+      setUserMessage(undefined);
+      handleImagePreview(undefined);
+      setImage(undefined);
+    } else if (files.length > 0 && files[0].type.includes("image/")) {
+      setUserMessage(undefined);
+      handleImagePreview(files[0]);
+      setImage(files[0]);
+    } else {
       const userMessage: UserMessage = {
         level: "error",
         text: "You can't upload this file format!"
       }
       setUserMessage(userMessage);
+      handleImagePreview(undefined);
       setImage(undefined);
-    } else if (files[0].type.includes("image/")) {
-      setUserMessage(undefined);
-      setImagePreview(files[0]);
-      setImage(files[0]);
     }
   };
 
-  const setImagePreview = (image: File) => {
+  const handleImagePreview = (image: File | undefined) => {
+    if (image === undefined) {
+      setImagePreview("");
+      return;
+    }
+
     const reader = new FileReader();
     reader.readAsDataURL(image);
     reader.onload = function() {
-      const imageElement = <HTMLImageElement> document.querySelector("#image-preview");
-      imageElement.src = (image !== null) ? <string> reader.result : imageElement.src = "";
+      setImagePreview(<string> reader.result)
     }
   };
 
@@ -82,10 +94,8 @@ const useTaskForm = () => {
     newTask.append("user",  <string> localStorage.getItem("user"));
     newTask.append("name", name);
     newTask.append("description", description);
-    // @ts-ignore
-    newTask.append("timestamp", new Date().getTime());
-    // @ts-ignore
-    newTask.append("tags", tags);
+    newTask.append("timestamp", new Date().getTime().toString());
+    newTask.append("tags", tags.toString());
     // @ts-ignore
     newTask.append("image", image);
 
@@ -122,7 +132,7 @@ const useTaskForm = () => {
     fetchTags,
     isChecked,
     setDefaultValues,
-    image,
+    imagePreview,
     tags,
     userMessage
   }];

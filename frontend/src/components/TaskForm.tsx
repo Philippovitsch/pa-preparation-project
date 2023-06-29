@@ -1,4 +1,4 @@
-import { Button, Checkbox, Form, Message, Segment } from "semantic-ui-react";
+import {Button, Checkbox, Form, Icon, Message, Segment} from "semantic-ui-react";
 import useTaskForm from "../logic/TaskFormLogic";
 import { TaskResponseModel } from "../model/TaskResponseModel.ts";
 import { Dispatch, SetStateAction, useEffect } from "react";
@@ -20,7 +20,7 @@ export default function TaskForm(props:
     fetchTags,
     isChecked,
     setDefaultValues,
-    image,
+    imagePreview,
     tags,
     userMessage
   }] = useTaskForm();
@@ -77,12 +77,18 @@ export default function TaskForm(props:
         <Form.Field>
           <label>Image upload</label>
           <input type="file" onChange={ (event) => handleImageUpload(event.target.files) } />
-          { (image || props.task?.imageData) &&
-            <img
+          { (imagePreview !== "") &&
+            <div style={{ position: "relative" }}>
+              <img
+                src={imagePreview}
                 id="image-preview"
                 style={{ width: "100px", marginTop: "10px" }}
                 alt="Preview"
-            />
+              />
+              <div onClick={() => handleImageUpload(null)} style={{ position: "absolute", left: "2px", top: "12px" }}>
+                  <Icon circular inverted name='delete' size="small" />
+              </div>
+            </div>
           }
         </Form.Field>
         <Button
