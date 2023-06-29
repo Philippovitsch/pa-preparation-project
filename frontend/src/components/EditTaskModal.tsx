@@ -1,4 +1,4 @@
-import { Modal } from "semantic-ui-react";
+import {Icon, Modal} from "semantic-ui-react";
 import { Dispatch, SetStateAction } from "react";
 import { TaskResponseModel } from "../model/TaskResponseModel.ts";
 import TaskForm from "./TaskForm.tsx";
@@ -17,6 +17,9 @@ export default function EditTaskModal(props:
       onClose={() => props.setOpenModal(false)}
       open={ props.openModal }
     >
+      <div style={{ position: "absolute", top: "15px", right: "10px" }}>
+        <Icon name="close" color="black" size="big" onClick={() => props.setOpenModal(false)} />
+      </div>
       <Modal.Header>Edit task</Modal.Header>
       <Modal.Content>
         <TaskForm
