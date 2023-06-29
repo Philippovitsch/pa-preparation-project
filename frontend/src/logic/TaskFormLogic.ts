@@ -45,10 +45,12 @@ const useTaskForm = () => {
   }
 
   const handleImageUpload = (files: FileList | null) => {
+    const imageUpload = document.querySelector("#image-upload") as HTMLInputElement;
     if (files === null) {
       setUserMessage(undefined);
       handleImagePreview(undefined);
       setImage(undefined);
+      imageUpload.value = "";
     } else if (files.length > 0 && files[0].type.includes("image/")) {
       setUserMessage(undefined);
       handleImagePreview(files[0]);
@@ -61,6 +63,7 @@ const useTaskForm = () => {
       setUserMessage(userMessage);
       handleImagePreview(undefined);
       setImage(undefined);
+      imageUpload.value = "";
     }
   };
 

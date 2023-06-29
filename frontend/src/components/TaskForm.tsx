@@ -76,7 +76,7 @@ export default function TaskForm(props:
         </Form.Field>
         <Form.Field>
           <label>Image upload</label>
-          <input type="file" onChange={ (event) => handleImageUpload(event.target.files) } />
+          <input type="file" id="image-upload" onChange={ (event) => handleImageUpload(event.target.files) } />
           { (imagePreview !== "") &&
             <div style={{ position: "relative" }}>
               <img
