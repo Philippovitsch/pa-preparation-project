@@ -13,11 +13,11 @@ export default function SignUp() {
         <Message error content={ userMessage.text } /> }
       <Form>
         <Form.Field>
-          <label>First Name</label>
+          <label>Username</label>
           <input placeholder="Username" type="text" id="task-name" onChange={ (event) => setUsername(event.target.value) } />
         </Form.Field>
         <Form.Field>
-          <label>Last Name</label>
+          <label>Password</label>
           <input placeholder="Password" type="password" onChange={ (event) => setPassword(event.target.value) } />
         </Form.Field>
         <Form.Field>
