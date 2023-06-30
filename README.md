@@ -1,4 +1,4 @@
-# PA Preparation Project
+# Task Tracker Application
 
 ## Description
 
@@ -12,13 +12,13 @@ It is a web application containing a frontend- and a backend server. The fronten
 
 The project is divided into milestones to let the project grow iteratively. After finishing these milestones, it has the following tech stack:
 
-- Java (eg. Data- & Service classes, Repositories, Streams)
+- Java (eg. Data- & Service classes, Interfaces, Streams)
 - JUnit (tests, parameterized tests)
 - Mockito
 - Spring Framework
 - Spring Web (CRUD functionality in a `@RestController`)
-- Spring Data JPA (at least one `@Entity` with a repository and an H2 database)
-- Spring Security (with basic authentication and Oauth2 Resource Server for JWT)
+- Spring Data JPA (at least one `@Entity` with a repository and a H2 database)
+- Spring Security (with basic authentication and OAuth2 Resource Server for JWT)
 - Spring tests (`@SpringBootTest`, `@WebMvcTest`, `@DataJpaTest`)
 - Spring security tests (`@WithMockUser`)
 - JavaScript (eg. arrow functions, spread operator, fetch/ axios)
@@ -39,7 +39,7 @@ After the implementation of Milestone 5, I decided to continue working on the pr
 
 ## Run locally
 
-In order to start both, the frontend and the backend server we need two terminals. This commands are tested in a Linux (Debian) environment.
+In order to start both, the frontend and the backend server, we need two terminals. These commands are tested in a Linux (Debian) environment.
 
 Open a Terminal and clone the project:
 ```ssh
@@ -64,13 +64,13 @@ There are two default users provided for the login:
 
 ## Screenshots
 
-Sign up page:
-![image](https://raw.githubusercontent.com/Philippovitsch/pa-preparation-project/main/screenshots/sign-up.jpg)
-
 Landing page with a logged in user:
 ![image](https://raw.githubusercontent.com/Philippovitsch/pa-preparation-project/main/screenshots/landing_2.jpg)
 
 Form to save a new task:
 ![image](https://raw.githubusercontent.com/Philippovitsch/pa-preparation-project/main/screenshots/new-task.jpg)
 
-More screenshots are available in the `screenshots` folder...
+Form to edit a task:
+![image](https://raw.githubusercontent.com/Philippovitsch/pa-preparation-project/main/screenshots/edit-task.jpg)
+
+More screenshots are available in the [screenshots](https://github.com/Philippovitsch/pa-preparation-project/tree/main/screenshots) folder...
