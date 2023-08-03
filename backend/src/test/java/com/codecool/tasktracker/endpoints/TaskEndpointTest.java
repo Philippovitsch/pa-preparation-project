@@ -3,7 +3,6 @@ package com.codecool.tasktracker.endpoints;
 import com.codecool.tasktracker.dto.TaskDto;
 import com.codecool.tasktracker.model.Task;
 import com.codecool.tasktracker.service.TaskEndpointService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
