@@ -51,14 +51,14 @@ const useTaskForm = () => {
       handleImagePreview(undefined);
       setImage(undefined);
       imageUpload.value = "";
-    } else if (files.length > 0 && files[0].type.includes("image/")) {
+    } else if (files.length > 0 && files[0].type.includes("image/") && files[0].size <= 1048576) {
       setUserMessage(undefined);
       handleImagePreview(files[0]);
       setImage(files[0]);
     } else {
       const userMessage: UserMessage = {
         level: "error",
-        text: "You can't upload this file format!"
+        text: "You can't upload this file!"
       }
       setUserMessage(userMessage);
       handleImagePreview(undefined);
