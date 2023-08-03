@@ -48,9 +48,10 @@ public class TaskEndpoint {
             @RequestParam("description") String description,
             @RequestParam("timestamp") long timestamp,
             @RequestParam("tags") Set<String> tags,
-            @RequestParam("image") Optional<MultipartFile> image
+            @RequestParam("image") Optional<MultipartFile> image,
+            @RequestParam("isDone") boolean isDone
     ) throws IOException {
-        TaskDto newTask = new TaskDto(user, name, description, new Timestamp(timestamp), tags, image);
+        TaskDto newTask = new TaskDto(user, name, description, new Timestamp(timestamp), tags, image, isDone);
         Task task = taskEndpointService.saveTask(newTask);
         if (task == null) throw new TaskAlreadyExistsException("Task already exists!");
         return task;
@@ -64,11 +65,19 @@ public class TaskEndpoint {
             @RequestParam("description") String description,
             @RequestParam("timestamp") long timestamp,
             @RequestParam("tags") Set<String> tags,
-            @RequestParam("image") Optional<MultipartFile> image
+            @RequestParam("image") Optional<MultipartFile> image,
+            @RequestParam("isDone") boolean isDone
 
     ) throws IOException {
-        TaskDto updatedTask = new TaskDto(user, name, description, new Timestamp(timestamp), tags, image);
+        TaskDto updatedTask = new TaskDto(user, name, description, new Timestamp(timestamp), tags, image, isDone);
         Task task = taskEndpointService.updateTaskByName(taskName, updatedTask);
+        if (task == null) throw new TaskNotFoundException("Task " + taskName + " not found!");
+        return task;
+    }
+
+    @PutMapping("/{taskName}/{isDone}")
+    public Task toggleIsDone(@PathVariable String taskName, @PathVariable boolean isDone) {
+        Task task = taskEndpointService.toggleIsDone(taskName, isDone);
         if (task == null) throw new TaskNotFoundException("Task " + taskName + " not found!");
         return task;
     }

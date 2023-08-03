@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 import java.sql.Timestamp;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @Entity
 @Data
 @Builder
@@ -34,6 +36,8 @@ public class Task {
     private String imageType;
     @Lob
     private byte[] imageData;
+    @JsonProperty("isDone")
+    private boolean isDone;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(

@@ -1,8 +1,8 @@
-import { Message } from "semantic-ui-react"
+import { Checkbox, Message } from "semantic-ui-react"
 import { TaskResponseModel } from "../model/TaskResponseModel.ts";
-import { useState } from "react";
 import ImageModal from "./ImageModal.tsx";
 import EditTaskModal from "./EditTaskModal.tsx";
+import useTask from "../logic/TaskLogic.ts";
 
 export default function Task(props:
   {
@@ -11,8 +11,7 @@ export default function Task(props:
     deleteTask: (task: TaskResponseModel) => Promise<void>
   }
 ) {
-  const [imageModal, setImageModal] = useState(false);
-  const [editModal, setEditModal] = useState(false);
+  const [{ imageModal, setImageModal, editModal, setEditModal, performToggleIsDone }] = useTask();
 
   return (
     <>
@@ -35,7 +34,14 @@ export default function Task(props:
       }
 
       <Message>
-        <Message.Header>{ props.task.name }</Message.Header>
+        <Message.Header>
+          <Checkbox
+            label=" "
+            defaultChecked={ props.task.isDone }
+            onChange={(_event, data) => performToggleIsDone(props.task.name, data.checked) }
+          />
+          { props.task.name }
+        </Message.Header>
         <p>{ props.task.description }</p>
         { props.task.imageName &&
             <div>

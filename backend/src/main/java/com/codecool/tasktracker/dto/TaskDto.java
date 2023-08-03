@@ -12,5 +12,6 @@ public record TaskDto(
         String description,
         Timestamp timestamp,
         Set<String> tags,
-        Optional<MultipartFile> image
+        Optional<MultipartFile> image,
+        boolean isDone
 ) {}

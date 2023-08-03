@@ -67,6 +67,7 @@ public class TaskEndpointService {
         newTask.setImageName(imageName);
         newTask.setImageType(imageType);
         newTask.setImageData(imageData);
+        newTask.setDone(taskDto.isDone());
 
         return taskRepository.save(newTask);
     }
@@ -90,12 +91,24 @@ public class TaskEndpointService {
             task.setImageName(imageName);
             task.setImageType(imageType);
             task.setImageData(imageData);
+            task.setDone(updatedTask.isDone());
 
             taskRepository.save(task);
             return task;
         }
 
         throw new AuthenticationException("You are not allowed to edit this task");
+    }
+
+    public Task toggleIsDone(String taskName, boolean isDone) {
+        Task task = taskRepository.getTaskByName(taskName);
+        if (task == null) {
+            return null;
+        }
+
+        task.setDone(isDone);
+        taskRepository.save(task);
+        return task;
     }
 
     public Task deleteTaskByName(String name) {

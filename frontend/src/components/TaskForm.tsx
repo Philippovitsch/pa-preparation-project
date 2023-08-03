@@ -95,7 +95,7 @@ export default function TaskForm(props:
           type="submit"
           style={{ marginTop: "15px" }}
           value="Save task"
-          onClick={ () => saveTask(props.saveTask, props.getTasks, props.setOpenModal) }
+          onClick={ () => saveTask(props.saveTask, props.task?.isDone, props.getTasks, props.setOpenModal) }
         >
           { props.buttonTitle }
         </Button>

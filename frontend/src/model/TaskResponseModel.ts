@@ -11,4 +11,5 @@ export type TaskResponseModel = {
   imageName: string,
   imageType: string,
   imageData: string,
+  isDone: boolean
 }

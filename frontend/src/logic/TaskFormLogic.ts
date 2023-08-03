@@ -82,7 +82,7 @@ const useTaskForm = () => {
 
   const navigate = useNavigate();
 
-  const saveTask = async (saveNewTask: Function, getTasks?: Function, setOpenModal?: Dispatch<SetStateAction<boolean>>) => {
+  const saveTask = async (saveNewTask: Function, isDone: boolean | undefined, getTasks?: Function, setOpenModal?: Dispatch<SetStateAction<boolean>>) => {
     if (name === "" || description === "") {
       setUserMessage({level: "error", text: "Please enter a name and a description!"});
       return;
@@ -101,6 +101,7 @@ const useTaskForm = () => {
     newTask.append("tags", tags.toString());
     // @ts-ignore
     newTask.append("image", image);
+    newTask.append("isDone", isDone ? isDone.toString() : "false");
 
     const response = await saveNewTask(newTask, originalTaskName);
 

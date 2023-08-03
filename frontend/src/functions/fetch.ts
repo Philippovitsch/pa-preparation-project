@@ -69,6 +69,12 @@ export function updateTask(task: FormData, taskName: string) {
   return fetchData(axiosConfig, token);
 }
 
+export function toggleIsDone(taskName: string, isDone: boolean) {
+  const token = "Bearer " + localStorage.getItem("bearerToken");
+  const axiosConfig = getAxiosConfig(`/api/tasks/${taskName}/${isDone}`, "PUT", token, {});
+  return fetchData(axiosConfig, token);
+}
+
 export function deleteTaskByName(name: string) {
   const token = "Bearer " + localStorage.getItem("bearerToken");
   const axiosConfig = getAxiosConfig(`/api/tasks/${name}`, "DELETE", token, {});
