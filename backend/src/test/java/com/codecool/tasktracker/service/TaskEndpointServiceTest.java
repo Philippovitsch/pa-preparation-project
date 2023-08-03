@@ -55,7 +55,8 @@ public class TaskEndpointServiceTest {
             "Test description",
             Timestamp.valueOf("2023-04-20 02:00:00.0"),
             new HashSet<>(),
-            Optional.empty()
+            Optional.empty(),
+            true
     );
 
 
@@ -148,6 +149,22 @@ public class TaskEndpointServiceTest {
         verify(taskRepository, times(1)).getTaskByName(any());
         verify(taskRepository, times(0)).save(any());
         verify(authContextUtil, times(1)).isTaskOwnerOrAdmin(any());
+    }
+
+    @Test
+    public void toggleIsDoneTest() {
+        when(taskRepository.getTaskByName(any())).thenReturn(task);
+        when(taskRepository.save(any())).thenReturn(task);
+        assertEquals(task, taskEndpointService.toggleIsDone(task.getName(), false));
+        verify(taskRepository, times(1)).getTaskByName(any());
+        verify(taskRepository, times(1)).save(any());
+    }
+
+    @Test
+    public void toggleIsDoneTestReturnsNull() {
+        when(taskRepository.getTaskByName(any())).thenReturn(null);
+        assertNull(taskEndpointService.toggleIsDone(task.getName(), false));
+        verify(taskRepository, times(1)).getTaskByName(any());
     }
 
     @Test

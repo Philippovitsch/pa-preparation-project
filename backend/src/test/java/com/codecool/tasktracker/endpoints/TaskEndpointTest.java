@@ -18,6 +18,7 @@ import java.util.Optional;
 
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -46,7 +47,8 @@ public class TaskEndpointTest {
             "Test description",
             Timestamp.valueOf("2023-04-20 02:00:00.0"),
             new HashSet<>(),
-            Optional.empty()
+            Optional.empty(),
+            true
     );
 
     @Test
@@ -105,6 +107,7 @@ public class TaskEndpointTest {
                         .param("description", taskDto.description())
                         .param("timestamp", String.valueOf(taskDto.timestamp().getTime()))
                         .param("tags", taskDto.tags().toString())
+                        .param("isDone", String.valueOf(taskDto.isDone()))
                         .with(csrf())
                 )
                 .andDo(print())
@@ -123,6 +126,7 @@ public class TaskEndpointTest {
                         .param("description", taskDto.description())
                         .param("timestamp", String.valueOf(taskDto.timestamp().getTime()))
                         .param("tags", taskDto.tags().toString())
+                        .param("isDone", String.valueOf(taskDto.isDone()))
                         .with(csrf())
                 )
                 .andDo(print())
@@ -139,6 +143,7 @@ public class TaskEndpointTest {
                         .param("description", taskDto.description())
                         .param("timestamp", String.valueOf(taskDto.timestamp().getTime()))
                         .param("tags", taskDto.tags().toString())
+                        .param("isDone", String.valueOf(taskDto.isDone()))
                         .with(request -> {
                             request.setMethod("PUT");
                             return request;
@@ -161,12 +166,33 @@ public class TaskEndpointTest {
                         .param("description", taskDto.description())
                         .param("timestamp", String.valueOf(taskDto.timestamp().getTime()))
                         .param("tags", taskDto.tags().toString())
+                        .param("isDone", String.valueOf(taskDto.isDone()))
                         .with(request -> {
                             request.setMethod("PUT");
                             return request;
                         })
                         .with(csrf())
                 )
+                .andDo(print())
+                .andExpect(status().is(HttpStatus.NOT_FOUND.value()));
+    }
+
+    @Test
+    @WithMockUser
+    public void toggleIsDoneTest() throws Exception {
+        when(taskEndpointService.toggleIsDone(any(), anyBoolean())).thenReturn(task);
+        mockMvc.perform(put("/api/tasks/TestTask/false").with(csrf()))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name", is(task.getName())))
+                .andExpect(jsonPath("$.isDone", is(task.isDone())));
+    }
+
+    @Test
+    @WithMockUser
+    public void toggleIsDoneThrowsError() throws Exception {
+        when(taskEndpointService.toggleIsDone(any(), anyBoolean())).thenReturn(null);
+        mockMvc.perform(put("/api/tasks/TestTask/false").with(csrf()))
                 .andDo(print())
                 .andExpect(status().is(HttpStatus.NOT_FOUND.value()));
     }
